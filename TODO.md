@@ -12,40 +12,40 @@
 ### TASK 1: Dependencies & Setup (30 min) ✅ DONE
 - [x] Update `gradle/libs.versions.toml` with all dependencies
 - [x] Update `build.gradle.kts` files
-- [ ] Sync project (DO THIS NOW!)
+- [x] Sync project
 - [x] Create package structure
-- [ ] Test build works
+- [x] Test build works
 
-### TASK 2: Setup Hilt DI (20 min)
-- [ ] Add Hilt application class
-- [ ] Add Hilt to MainActivity
-- [ ] Create network module
-- [ ] Create database module
+### TASK 2: Setup Hilt DI (20 min) ✅ DONE
+- [x] Add Hilt application class
+- [x] Add Hilt to MainActivity
+- [x] Create network module
+- [x] Create database module
 
-### TASK 3: Create Data Layer - DTOs & API (45 min)
-- [ ] Create `data/remote/dto/CoinDto.kt`
-- [ ] Create `data/remote/dto/CoinDetailDto.kt`
-- [ ] Create `data/remote/dto/MarketChartDto.kt`
-- [ ] Create `data/remote/api/CoinGeckoApi.kt` interface
-- [ ] Create Retrofit instance in NetworkModule
+### TASK 3: Create Data Layer - DTOs & API (45 min) ✅ DONE
+- [x] Create `data/remote/dto/CoinDto.kt`
+- [x] Create `data/remote/dto/CoinDetailDto.kt`
+- [x] Create `data/remote/dto/MarketChartDto.kt`
+- [x] Create `data/remote/api/CoinGeckoApi.kt` interface
+- [x] Create Retrofit instance in NetworkModule
 
-### TASK 4: Create Data Layer - Room Database (45 min)
-- [ ] Create `data/local/entity/CoinEntity.kt`
-- [ ] Create `data/local/entity/WatchlistEntity.kt`
-- [ ] Create `data/local/dao/CoinDao.kt`
-- [ ] Create `data/local/dao/WatchlistDao.kt`
-- [ ] Create `data/local/database/MoneytworkDatabase.kt`
+### TASK 4: Create Data Layer - Room Database (45 min) ✅ DONE
+- [x] Create `data/local/entity/CoinEntity.kt`
+- [x] Create `data/local/entity/WatchlistEntity.kt`
+- [x] Create `data/local/dao/CoinDao.kt`
+- [x] Create `data/local/dao/WatchlistDao.kt`
+- [x] Create `data/local/database/MoneytworkDatabase.kt`
 
-### TASK 5: Create Domain Layer (30 min)
-- [ ] Create `domain/model/Coin.kt`
-- [ ] Create `domain/model/CoinDetail.kt`
-- [ ] Create `domain/repository/CryptoRepository.kt` interface
-- [ ] Create mapper functions (DTO → Domain)
+### TASK 5: Create Domain Layer (30 min) ✅ DONE
+- [x] Create `domain/model/Coin.kt`
+- [x] Create `domain/model/CoinDetail.kt`
+- [x] Create `domain/repository/CryptoRepository.kt` interface
+- [x] Create mapper functions (DTO → Domain)
 
-### TASK 6: Create Repository Implementation (30 min)
-- [ ] Create `data/repository/CryptoRepositoryImpl.kt`
-- [ ] Implement caching logic
-- [ ] Add to DI module
+### TASK 6: Create Repository Implementation (30 min) ✅ DONE
+- [x] Create `data/repository/CryptoRepositoryImpl.kt`
+- [x] Implement caching logic
+- [x] Add to DI module
 
 ### TASK 7: Create Use Cases (20 min)
 - [ ] Create `domain/usecase/GetTrendingCoinsUseCase.kt`

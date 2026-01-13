@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+              <option name="originalContent" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#10;&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&#10;    xmlns:tools=&quot;http://schemas.android.com/tools&quot;&gt;&#10;&#10;    &lt;application&#10;        android:allowBackup=&quot;true&quot;&#10;        android:dataExtractionRules=&quot;@xml/data_extraction_rules&quot;&#10;        android:fullBackupContent=&quot;@xml/backup_rules&quot;&#10;        android:icon=&quot;@mipmap/ic_launcher&quot;&#10;        android:label=&quot;@string/app_name&quot;&#10;        android:roundIcon=&quot;@mipmap/ic_launcher_round&quot;&#10;        android:supportsRtl=&quot;true&quot;&#10;        android:theme=&quot;@style/Theme.Moneytwork&quot;&gt;&#10;        &lt;activity&#10;            android:name=&quot;.MainActivity&quot;&#10;            android:exported=&quot;true&quot;&#10;            android:label=&quot;@string/app_name&quot;&#10;            android:theme=&quot;@style/Theme.Moneytwork&quot;&gt;&#10;            &lt;intent-filter&gt;&#10;                &lt;action android:name=&quot;android.intent.action.MAIN&quot; /&gt;&#10;&#10;                &lt;category android:name=&quot;android.intent.category.LAUNCHER&quot; /&gt;&#10;            &lt;/intent-filter&gt;&#10;        &lt;/activity&gt;&#10;    &lt;/application&gt;&#10;&#10;&lt;/manifest&gt;" />
+              <option name="updatedContent" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#10;&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&#10;    xmlns:tools=&quot;http://schemas.android.com/tools&quot;&gt;&#10;&#10;    &lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;&#10;    &lt;uses-permission android:name=&quot;android.permission.ACCESS_NETWORK_STATE&quot; /&gt;&#10;&#10;    &lt;application&#10;        android:name=&quot;.MoneytworkApplication&quot;&#10;        android:allowBackup=&quot;true&quot;&#10;        android:dataExtractionRules=&quot;@xml/data_extraction_rules&quot;&#10;        android:fullBackupContent=&quot;@xml/backup_rules&quot;&#10;        android:icon=&quot;@mipmap/ic_launcher&quot;&#10;        android:label=&quot;@string/app_name&quot;&#10;        android:roundIcon=&quot;@mipmap/ic_launcher_round&quot;&#10;        android:supportsRtl=&quot;true&quot;&#10;        android:theme=&quot;@style/Theme.Moneytwork&quot;&gt;&#10;        &lt;activity&#10;            android:name=&quot;.MainActivity&quot;&#10;            android:exported=&quot;true&quot;&#10;            android:label=&quot;@string/app_name&quot;&#10;            android:theme=&quot;@style/Theme.Moneytwork&quot;&gt;&#10;            &lt;intent-filter&gt;&#10;                &lt;action android:name=&quot;android.intent.action.MAIN&quot; /&gt;&#10;&#10;                &lt;category android:name=&quot;android.intent.category.LAUNCHER&quot; /&gt;&#10;            &lt;/intent-filter&gt;&#10;        &lt;/activity&gt;&#10;    &lt;/application&gt;&#10;&#10;&lt;/manifest&gt;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/MainActivity.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/MainActivity.kt" />
+              <option name="originalContent" value="package com.example.moneytwork&#10;&#10;import android.os.Bundle&#10;import androidx.activity.ComponentActivity&#10;import androidx.activity.compose.setContent&#10;import androidx.activity.enableEdgeToEdge&#10;import androidx.compose.foundation.layout.fillMaxSize&#10;import androidx.compose.foundation.layout.padding&#10;import androidx.compose.material3.Scaffold&#10;import androidx.compose.material3.Text&#10;import androidx.compose.runtime.Composable&#10;import androidx.compose.ui.Modifier&#10;import androidx.compose.ui.tooling.preview.Preview&#10;import com.example.moneytwork.ui.theme.MoneytworkTheme&#10;&#10;class MainActivity : ComponentActivity() {&#10;    override fun onCreate(savedInstanceState: Bundle?) {&#10;        super.onCreate(savedInstanceState)&#10;        enableEdgeToEdge()&#10;        setContent {&#10;            MoneytworkTheme {&#10;                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding -&gt;&#10;                    Greeting(&#10;                        name = &quot;Android&quot;,&#10;                        modifier = Modifier.padding(innerPadding)&#10;                    )&#10;                }&#10;            }&#10;        }&#10;    }&#10;}&#10;&#10;@Composable&#10;fun Greeting(name: String, modifier: Modifier = Modifier) {&#10;    Text(&#10;        text = &quot;Hello $name!&quot;,&#10;        modifier = modifier&#10;    )&#10;}&#10;&#10;@Preview(showBackground = true)&#10;@Composable&#10;fun GreetingPreview() {&#10;    MoneytworkTheme {&#10;        Greeting(&quot;Android&quot;)&#10;    }&#10;}" />
+              <option name="updatedContent" value="package com.example.moneytwork&#10;&#10;import android.os.Bundle&#10;import androidx.activity.ComponentActivity&#10;import androidx.activity.compose.setContent&#10;import androidx.activity.enableEdgeToEdge&#10;import androidx.compose.foundation.layout.fillMaxSize&#10;import androidx.compose.foundation.layout.padding&#10;import androidx.compose.material3.Scaffold&#10;import androidx.compose.material3.Text&#10;import androidx.compose.runtime.Composable&#10;import androidx.compose.ui.Modifier&#10;import androidx.compose.ui.tooling.preview.Preview&#10;import com.example.moneytwork.ui.theme.MoneytworkTheme&#10;import dagger.hilt.android.AndroidEntryPoint&#10;&#10;@AndroidEntryPoint&#10;class MainActivity : ComponentActivity() {&#10;    override fun onCreate(savedInstanceState: Bundle?) {&#10;        super.onCreate(savedInstanceState)&#10;        enableEdgeToEdge()&#10;        setContent {&#10;            MoneytworkTheme {&#10;                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding -&gt;&#10;                    Greeting(&#10;                        name = &quot;Android&quot;,&#10;                        modifier = Modifier.padding(innerPadding)&#10;                    )&#10;                }&#10;            }&#10;        }&#10;    }&#10;}&#10;&#10;@Composable&#10;fun Greeting(name: String, modifier: Modifier = Modifier) {&#10;    Text(&#10;        text = &quot;Hello $name!&quot;,&#10;        modifier = modifier&#10;    )&#10;}&#10;&#10;@Preview(showBackground = true)&#10;@Composable&#10;fun GreetingPreview() {&#10;    MoneytworkTheme {&#10;        Greeting(&quot;Android&quot;)&#10;    }&#10;}" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/MoneytworkApplication.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/MoneytworkApplication.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork&#10;&#10;import android.app.Application&#10;import dagger.hilt.android.HiltAndroidApp&#10;&#10;@HiltAndroidApp&#10;class MoneytworkApplication : Application()&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/core/constants/Constants.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/core/constants/Constants.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.core.constants&#10;&#10;object Constants {&#10;    const val COINGECKO_BASE_URL = &quot;https://api.coingecko.com/api/v3/&quot;&#10;    const val FINNHUB_BASE_URL = &quot;https://finnhub.io/api/v1/&quot;&#10;    &#10;    const val DATABASE_NAME = &quot;moneytwork_database&quot;&#10;    &#10;    const val CACHE_EXPIRATION_MS = 5 * 60 * 1000L // 5 minutes&#10;    &#10;    const val PARAM_COIN_ID = &quot;coinId&quot;&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/core/di/AppModule.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/core/di/AppModule.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.core.di&#10;&#10;import android.app.Application&#10;import androidx.room.Room&#10;import com.example.moneytwork.core.constants.Constants&#10;import com.example.moneytwork.data.local.database.MoneytworkDatabase&#10;import com.example.moneytwork.data.remote.api.CoinGeckoApi&#10;import com.example.moneytwork.data.repository.CryptoRepositoryImpl&#10;import com.example.moneytwork.domain.repository.CryptoRepository&#10;import dagger.Module&#10;import dagger.Provides&#10;import dagger.hilt.InstallIn&#10;import dagger.hilt.components.SingletonComponent&#10;import okhttp3.OkHttpClient&#10;import okhttp3.logging.HttpLoggingInterceptor&#10;import retrofit2.Retrofit&#10;import retrofit2.converter.gson.GsonConverterFactory&#10;import java.util.concurrent.TimeUnit&#10;import javax.inject.Singleton&#10;&#10;@Module&#10;@InstallIn(SingletonComponent::class)&#10;object AppModule {&#10;&#10;    @Provides&#10;    @Singleton&#10;    fun provideOkHttpClient(): OkHttpClient {&#10;        val loggingInterceptor = HttpLoggingInterceptor().apply {&#10;            level = HttpLoggingInterceptor.Level.BODY&#10;        }&#10;        &#10;        return OkHttpClient.Builder()&#10;            .addInterceptor(loggingInterceptor)&#10;            .connectTimeout(30, TimeUnit.SECONDS)&#10;            .readTimeout(30, TimeUnit.SECONDS)&#10;            .writeTimeout(30, TimeUnit.SECONDS)&#10;            .build()&#10;    }&#10;&#10;    @Provides&#10;    @Singleton&#10;    fun provideCoinGeckoApi(okHttpClient: OkHttpClient): CoinGeckoApi {&#10;        return Retrofit.Builder()&#10;            .baseUrl(Constants.COINGECKO_BASE_URL)&#10;            .client(okHttpClient)&#10;            .addConverterFactory(GsonConverterFactory.create())&#10;            .build()&#10;            .create(CoinGeckoApi::class.java)&#10;    }&#10;&#10;    @Provides&#10;    @Singleton&#10;    fun provideMoneytworkDatabase(app: Application): MoneytworkDatabase {&#10;        return Room.databaseBuilder(&#10;            app,&#10;            MoneytworkDatabase::class.java,&#10;            Constants.DATABASE_NAME&#10;        ).build()&#10;    }&#10;&#10;    @Provides&#10;    @Singleton&#10;    fun provideCryptoRepository(&#10;        api: CoinGeckoApi,&#10;        db: MoneytworkDatabase&#10;    ): CryptoRepository {&#10;        return CryptoRepositoryImpl(api, db.coinDao, db.watchlistDao)&#10;    }&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/core/util/Resource.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/core/util/Resource.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.core.util&#10;&#10;sealed class Resource&lt;T&gt;(val data: T? = null, val message: String? = null) {&#10;    class Success&lt;T&gt;(data: T) : Resource&lt;T&gt;(data)&#10;    class Error&lt;T&gt;(message: String, data: T? = null) : Resource&lt;T&gt;(data, message)&#10;    class Loading&lt;T&gt;(data: T? = null) : Resource&lt;T&gt;(data)&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/local/dao/CoinDao.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/local/dao/CoinDao.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.data.local.dao&#10;&#10;import androidx.room.*&#10;import com.example.moneytwork.data.local.entity.CoinEntity&#10;import kotlinx.coroutines.flow.Flow&#10;&#10;@Dao&#10;interface CoinDao {&#10;    &#10;    @Query(&quot;SELECT * FROM coins ORDER BY marketCapRank ASC&quot;)&#10;    fun getCoins(): Flow&lt;List&lt;CoinEntity&gt;&gt;&#10;    &#10;    @Query(&quot;SELECT * FROM coins WHERE id = :coinId&quot;)&#10;    suspend fun getCoinById(coinId: String): CoinEntity?&#10;    &#10;    @Insert(onConflict = OnConflictStrategy.REPLACE)&#10;    suspend fun insertCoins(coins: List&lt;CoinEntity&gt;)&#10;    &#10;    @Insert(onConflict = OnConflictStrategy.REPLACE)&#10;    suspend fun insertCoin(coin: CoinEntity)&#10;    &#10;    @Query(&quot;DELETE FROM coins&quot;)&#10;    suspend fun clearCoins()&#10;    &#10;    @Query(&quot;SELECT * FROM coins WHERE name LIKE '%' || :query || '%' OR symbol LIKE '%' || :query || '%'&quot;)&#10;    fun searchCoins(query: String): Flow&lt;List&lt;CoinEntity&gt;&gt;&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/local/dao/WatchlistDao.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/local/dao/WatchlistDao.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.data.local.dao&#10;&#10;import androidx.room.*&#10;import com.example.moneytwork.data.local.entity.WatchlistEntity&#10;import kotlinx.coroutines.flow.Flow&#10;&#10;@Dao&#10;interface WatchlistDao {&#10;    &#10;    @Query(&quot;SELECT * FROM watchlist ORDER BY addedAt DESC&quot;)&#10;    fun getWatchlist(): Flow&lt;List&lt;WatchlistEntity&gt;&gt;&#10;    &#10;    @Query(&quot;SELECT * FROM watchlist WHERE coinId = :coinId&quot;)&#10;    suspend fun getWatchlistItem(coinId: String): WatchlistEntity?&#10;    &#10;    @Insert(onConflict = OnConflictStrategy.REPLACE)&#10;    suspend fun addToWatchlist(item: WatchlistEntity)&#10;    &#10;    @Delete&#10;    suspend fun removeFromWatchlist(item: WatchlistEntity)&#10;    &#10;    @Query(&quot;DELETE FROM watchlist WHERE coinId = :coinId&quot;)&#10;    suspend fun removeFromWatchlistById(coinId: String)&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/local/database/MoneytworkDatabase.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/local/database/MoneytworkDatabase.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.data.local.database&#10;&#10;import androidx.room.Database&#10;import androidx.room.RoomDatabase&#10;import com.example.moneytwork.data.local.dao.CoinDao&#10;import com.example.moneytwork.data.local.dao.WatchlistDao&#10;import com.example.moneytwork.data.local.entity.CoinEntity&#10;import com.example.moneytwork.data.local.entity.WatchlistEntity&#10;&#10;@Database(&#10;    entities = [CoinEntity::class, WatchlistEntity::class],&#10;    version = 1,&#10;    exportSchema = false&#10;)&#10;abstract class MoneytworkDatabase : RoomDatabase() {&#10;    abstract val coinDao: CoinDao&#10;    abstract val watchlistDao: WatchlistDao&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/local/entity/CoinEntity.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/local/entity/CoinEntity.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.data.local.entity&#10;&#10;import androidx.room.Entity&#10;import androidx.room.PrimaryKey&#10;&#10;@Entity(tableName = &quot;coins&quot;)&#10;data class CoinEntity(&#10;    @PrimaryKey val id: String,&#10;    val symbol: String,&#10;    val name: String,&#10;    val image: String,&#10;    val currentPrice: Double,&#10;    val marketCap: Long,&#10;    val marketCapRank: Int?,&#10;    val totalVolume: Long,&#10;    val priceChangePercentage24h: Double?,&#10;    val lastUpdated: Long&#10;)&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/local/entity/WatchlistEntity.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/local/entity/WatchlistEntity.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.data.local.entity&#10;&#10;import androidx.room.Entity&#10;import androidx.room.PrimaryKey&#10;&#10;@Entity(tableName = &quot;watchlist&quot;)&#10;data class WatchlistEntity(&#10;    @PrimaryKey val coinId: String,&#10;    val addedAt: Long = System.currentTimeMillis()&#10;)&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/remote/api/CoinGeckoApi.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/remote/api/CoinGeckoApi.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.data.remote.api&#10;&#10;import com.example.moneytwork.data.remote.dto.CoinDetailDto&#10;import com.example.moneytwork.data.remote.dto.CoinDto&#10;import com.example.moneytwork.data.remote.dto.MarketChartDto&#10;import com.example.moneytwork.data.remote.dto.SearchResponseDto&#10;import retrofit2.http.GET&#10;import retrofit2.http.Path&#10;import retrofit2.http.Query&#10;&#10;interface CoinGeckoApi {&#10;    &#10;    @GET(&quot;coins/markets&quot;)&#10;    suspend fun getMarketCoins(&#10;        @Query(&quot;vs_currency&quot;) currency: String = &quot;usd&quot;,&#10;        @Query(&quot;order&quot;) order: String = &quot;market_cap_desc&quot;,&#10;        @Query(&quot;per_page&quot;) perPage: Int = 50,&#10;        @Query(&quot;page&quot;) page: Int = 1,&#10;        @Query(&quot;sparkline&quot;) sparkline: Boolean = false,&#10;        @Query(&quot;price_change_percentage&quot;) priceChangePercentage: String = &quot;24h&quot;&#10;    ): List&lt;CoinDto&gt;&#10;    &#10;    @GET(&quot;coins/{id}&quot;)&#10;    suspend fun getCoinDetail(&#10;        @Path(&quot;id&quot;) coinId: String,&#10;        @Query(&quot;localization&quot;) localization: Boolean = false,&#10;        @Query(&quot;tickers&quot;) tickers: Boolean = false,&#10;        @Query(&quot;market_data&quot;) marketData: Boolean = true,&#10;        @Query(&quot;community_data&quot;) communityData: Boolean = false,&#10;        @Query(&quot;developer_data&quot;) developerData: Boolean = false&#10;    ): CoinDetailDto&#10;    &#10;    @GET(&quot;coins/{id}/market_chart&quot;)&#10;    suspend fun getMarketChart(&#10;        @Path(&quot;id&quot;) coinId: String,&#10;        @Query(&quot;vs_currency&quot;) currency: String = &quot;usd&quot;,&#10;        @Query(&quot;days&quot;) days: String,&#10;        @Query(&quot;interval&quot;) interval: String? = null&#10;    ): MarketChartDto&#10;    &#10;    @GET(&quot;search&quot;)&#10;    suspend fun searchCoins(&#10;        @Query(&quot;query&quot;) query: String&#10;    ): SearchResponseDto&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/remote/dto/CoinDetailDto.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/remote/dto/CoinDetailDto.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.data.remote.dto&#10;&#10;import com.google.gson.annotations.SerializedName&#10;&#10;data class CoinDetailDto(&#10;    @SerializedName(&quot;id&quot;) val id: String,&#10;    @SerializedName(&quot;symbol&quot;) val symbol: String,&#10;    @SerializedName(&quot;name&quot;) val name: String,&#10;    @SerializedName(&quot;description&quot;) val description: Map&lt;String, String&gt;?,&#10;    @SerializedName(&quot;image&quot;) val image: ImageDto?,&#10;    @SerializedName(&quot;market_data&quot;) val marketData: MarketDataDto?&#10;)&#10;&#10;data class ImageDto(&#10;    @SerializedName(&quot;large&quot;) val large: String?&#10;)&#10;&#10;data class MarketDataDto(&#10;    @SerializedName(&quot;current_price&quot;) val currentPrice: Map&lt;String, Double&gt;?,&#10;    @SerializedName(&quot;market_cap&quot;) val marketCap: Map&lt;String, Long&gt;?,&#10;    @SerializedName(&quot;total_volume&quot;) val totalVolume: Map&lt;String, Long&gt;?,&#10;    @SerializedName(&quot;high_24h&quot;) val high24h: Map&lt;String, Double&gt;?,&#10;    @SerializedName(&quot;low_24h&quot;) val low24h: Map&lt;String, Double&gt;?,&#10;    @SerializedName(&quot;price_change_percentage_24h&quot;) val priceChangePercentage24h: Double?,&#10;    @SerializedName(&quot;price_change_percentage_7d&quot;) val priceChangePercentage7d: Double?,&#10;    @SerializedName(&quot;price_change_percentage_30d&quot;) val priceChangePercentage30d: Double?&#10;)&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/remote/dto/CoinDto.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/remote/dto/CoinDto.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.data.remote.dto&#10;&#10;import com.google.gson.annotations.SerializedName&#10;&#10;data class CoinDto(&#10;    @SerializedName(&quot;id&quot;) val id: String,&#10;    @SerializedName(&quot;symbol&quot;) val symbol: String,&#10;    @SerializedName(&quot;name&quot;) val name: String,&#10;    @SerializedName(&quot;image&quot;) val image: String,&#10;    @SerializedName(&quot;current_price&quot;) val currentPrice: Double,&#10;    @SerializedName(&quot;market_cap&quot;) val marketCap: Long,&#10;    @SerializedName(&quot;market_cap_rank&quot;) val marketCapRank: Int?,&#10;    @SerializedName(&quot;total_volume&quot;) val totalVolume: Long,&#10;    @SerializedName(&quot;high_24h&quot;) val high24h: Double?,&#10;    @SerializedName(&quot;low_24h&quot;) val low24h: Double?,&#10;    @SerializedName(&quot;price_change_24h&quot;) val priceChange24h: Double?,&#10;    @SerializedName(&quot;price_change_percentage_24h&quot;) val priceChangePercentage24h: Double?,&#10;    @SerializedName(&quot;circulating_supply&quot;) val circulatingSupply: Double?,&#10;    @SerializedName(&quot;total_supply&quot;) val totalSupply: Double?,&#10;    @SerializedName(&quot;last_updated&quot;) val lastUpdated: String&#10;)&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/remote/dto/MarketChartDto.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/remote/dto/MarketChartDto.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.data.remote.dto&#10;&#10;import com.google.gson.annotations.SerializedName&#10;&#10;data class MarketChartDto(&#10;    @SerializedName(&quot;prices&quot;) val prices: List&lt;List&lt;Double&gt;&gt;&#10;)&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/remote/dto/SearchResponseDto.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/data/remote/dto/SearchResponseDto.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.data.remote.dto&#10;&#10;import com.google.gson.annotations.SerializedName&#10;&#10;data class SearchResponseDto(&#10;    @SerializedName(&quot;coins&quot;) val coins: List&lt;SearchCoinDto&gt;&#10;)&#10;&#10;data class SearchCoinDto(&#10;    @SerializedName(&quot;id&quot;) val id: String,&#10;    @SerializedName(&quot;name&quot;) val name: String,&#10;    @SerializedName(&quot;symbol&quot;) val symbol: String,&#10;    @SerializedName(&quot;market_cap_rank&quot;) val marketCapRank: Int?,&#10;    @SerializedName(&quot;thumb&quot;) val thumb: String?,&#10;    @SerializedName(&quot;large&quot;) val large: String?&#10;)&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/domain/model/ChartData.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/domain/model/ChartData.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.domain.model&#10;&#10;data class ChartData(&#10;    val prices: List&lt;ChartPoint&gt;&#10;)&#10;&#10;data class ChartPoint(&#10;    val timestamp: Long,&#10;    val price: Double&#10;)&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/domain/model/Coin.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/domain/model/Coin.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.domain.model&#10;&#10;data class Coin(&#10;    val id: String,&#10;    val symbol: String,&#10;    val name: String,&#10;    val image: String,&#10;    val currentPrice: Double,&#10;    val marketCap: Long,&#10;    val marketCapRank: Int?,&#10;    val totalVolume: Long,&#10;    val priceChangePercentage24h: Double?,&#10;    val lastUpdated: String&#10;)&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/domain/model/CoinDetail.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/domain/model/CoinDetail.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.domain.model&#10;&#10;data class CoinDetail(&#10;    val id: String,&#10;    val symbol: String,&#10;    val name: String,&#10;    val description: String,&#10;    val image: String,&#10;    val currentPrice: Double,&#10;    val marketCap: Long,&#10;    val totalVolume: Long,&#10;    val high24h: Double?,&#10;    val low24h: Double?,&#10;    val priceChangePercentage24h: Double?,&#10;    val priceChangePercentage7d: Double?,&#10;    val priceChangePercentage30d: Double?&#10;)&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/domain/repository/CryptoRepository.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/example/moneytwork/domain/repository/CryptoRepository.kt" />
+              <option name="updatedContent" value="package com.example.moneytwork.domain.repository&#10;&#10;import com.example.moneytwork.core.util.Resource&#10;import com.example.moneytwork.domain.model.ChartData&#10;import com.example.moneytwork.domain.model.Coin&#10;import com.example.moneytwork.domain.model.CoinDetail&#10;import kotlinx.coroutines.flow.Flow&#10;&#10;interface CryptoRepository {&#10;    fun getCoins(forceRefresh: Boolean = false): Flow&lt;Resource&lt;List&lt;Coin&gt;&gt;&gt;&#10;    fun getCoinDetail(coinId: String): Flow&lt;Resource&lt;CoinDetail&gt;&gt;&#10;    fun getMarketChart(coinId: String, days: String): Flow&lt;Resource&lt;ChartData&gt;&gt;&#10;    fun searchCoins(query: String): Flow&lt;Resource&lt;List&lt;Coin&gt;&gt;&gt;&#10;    fun getWatchlist(): Flow&lt;List&lt;Coin&gt;&gt;&#10;    suspend fun addToWatchlist(coinId: String)&#10;    suspend fun removeFromWatchlist(coinId: String)&#10;    suspend fun isInWatchlist(coinId: String): Boolean&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
