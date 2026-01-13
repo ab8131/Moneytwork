@@ -65,7 +65,7 @@ class CryptoRepositoryImpl @Inject constructor(
         emit(Resource.Loading())
 
         try {
-            val chart = api.getMarketChart(coinId, days)
+            val chart = api.getMarketChart(coinId = coinId, days = days)
             emit(Resource.Success(chart.toChartData()))
         } catch (e: Exception) {
             emit(Resource.Error(e.localizedMessage ?: "An error occurred"))
