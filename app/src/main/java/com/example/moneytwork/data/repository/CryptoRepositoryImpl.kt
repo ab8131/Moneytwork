@@ -1,5 +1,6 @@
 package com.example.moneytwork.data.repository
 
+import android.util.Log
 import com.example.moneytwork.core.util.Resource
 import com.example.moneytwork.data.local.dao.CoinDao
 import com.example.moneytwork.data.local.dao.WatchlistDao
@@ -26,17 +27,22 @@ class CryptoRepositoryImpl @Inject constructor(
 ) : CryptoRepository {
 
     override fun getCoins(forceRefresh: Boolean): Flow<Resource<List<Coin>>> = flow {
+        Log.d("CryptoRepository", "getCoins called")
         emit(Resource.Loading())
 
         // Fetch from API
         try {
+            Log.d("CryptoRepository", "Fetching from API...")
             val remoteCoins = api.getMarketCoins()
+            Log.d("CryptoRepository", "API returned ${remoteCoins.size} coins")
             val entities = remoteCoins.map { it.toEntity() }
             coinDao.clearCoins()
             coinDao.insertCoins(entities)
 
             emit(Resource.Success(entities.map { it.toCoin() }))
+            Log.d("CryptoRepository", "Success emitted")
         } catch (e: Exception) {
+            Log.e("CryptoRepository", "Error: ${e.message}", e)
             emit(Resource.Error(e.localizedMessage ?: "An error occurred"))
         }
     }

@@ -21,12 +21,26 @@ fun MarketListScreen(
     viewModel: MarketListViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
+    val tabs = listOf(MarketTab.CRYPTO, MarketTab.STOCKS)
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Moneytwork") }
-            )
+            Column {
+                TopAppBar(
+                    title = { Text("Moneytwork") }
+                )
+                TabRow(
+                    selectedTabIndex = state.selectedTabIndex
+                ) {
+                    tabs.forEachIndexed { index, tab ->
+                        Tab(
+                            selected = state.selectedTabIndex == index,
+                            onClick = { viewModel.onEvent(MarketListEvent.OnTabSelected(index)) },
+                            text = { Text(tab.title) }
+                        )
+                    }
+                }
+            }
         }
     ) { paddingValues ->
         Box(
@@ -56,14 +70,30 @@ fun MarketListScreen(
                 }
 
                 state.coins.isEmpty() && !state.isLoading -> {
-                    Text(
-                        text = "No coins available",
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(20.dp)
-                            .align(Alignment.Center)
-                    )
+                    Column(
+                        modifier = Modifier.align(Alignment.Center),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = if (state.selectedTabIndex == 1)
+                                "Stocks coming soon!"
+                            else
+                                "No coins available",
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(20.dp)
+                        )
+                        if (state.selectedTabIndex == 1) {
+                            Text(
+                                text = "Stock market integration will be added next",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(horizontal = 20.dp)
+                            )
+                        }
+                    }
                 }
 
                 else -> {
