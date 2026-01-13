@@ -28,15 +28,6 @@ class CryptoRepositoryImpl @Inject constructor(
     override fun getCoins(forceRefresh: Boolean): Flow<Resource<List<Coin>>> = flow {
         emit(Resource.Loading())
 
-        // Emit cached data first
-        val localCoins = coinDao.getCoins()
-        localCoins.collect { entities ->
-            if (entities.isNotEmpty() && !forceRefresh) {
-                emit(Resource.Success(entities.map { it.toCoin() }))
-                return@collect
-            }
-        }
-
         // Fetch from API
         try {
             val remoteCoins = api.getMarketCoins()

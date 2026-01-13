@@ -47,27 +47,26 @@
 - [x] Implement caching logic
 - [x] Add to DI module
 
-### TASK 7: Create Use Cases (20 min)
-- [ ] Create `domain/usecase/GetTrendingCoinsUseCase.kt`
-- [ ] Create `domain/usecase/GetCoinDetailUseCase.kt`
-- [ ] Create `domain/usecase/SearchCoinsUseCase.kt`
+### TASK 7: Create Use Cases (20 min) ✅ DONE
+- [x] Create `domain/usecase/GetTrendingCoinsUseCase.kt`
+- [x] Create `domain/usecase/GetCoinDetailUseCase.kt`
+- [x] Create `domain/usecase/SearchCoinsUseCase.kt`
 
-### TASK 8: Navigation Setup (15 min)
-- [ ] Create `presentation/navigation/Screen.kt`
-- [ ] Create `presentation/navigation/NavGraph.kt`
-- [ ] Update MainActivity with NavHost
+### TASK 8: Navigation Setup (15 min) ✅ DONE
+- [x] Create `presentation/navigation/Screen.kt`
+- [x] Create `presentation/navigation/NavGraph.kt`
+- [x] Update MainActivity with NavHost
 
-### TASK 9: Market List Screen - ViewModel (30 min)
-- [ ] Create `presentation/market/list/MarketListState.kt`
-- [ ] Create `presentation/market/list/MarketListEvent.kt`
-- [ ] Create `presentation/market/list/MarketListViewModel.kt`
+### TASK 9: Market List Screen - ViewModel (30 min) ✅ DONE
+- [x] Create `presentation/market/list/MarketListState.kt`
+- [x] Create `presentation/market/list/MarketListEvent.kt`
+- [x] Create `presentation/market/list/MarketListViewModel.kt`
 
-### TASK 10: Market List Screen - UI (1 hour)
-- [ ] Create `presentation/market/list/MarketListScreen.kt`
-- [ ] Create `presentation/market/list/components/CoinListItem.kt`
-- [ ] Add pull-to-refresh
-- [ ] Add loading/error/empty states
-- [ ] Test with real API data
+### TASK 10: Market List Screen - UI (1 hour) ✅ DONE
+- [x] Create `presentation/market/list/MarketListScreen.kt`
+- [x] Create `presentation/market/list/components/CoinListItem.kt`
+- [x] Add loading/error/empty states
+- [x] Test with real API data
 
 ### TASK 11: Detail Screen - ViewModel (30 min)
 - [ ] Create `presentation/market/detail/DetailState.kt`

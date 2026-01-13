@@ -1,6 +1,7 @@
 package com.example.moneytwork.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -10,10 +11,14 @@ import com.example.moneytwork.core.constants.Constants
 import com.example.moneytwork.presentation.market.list.MarketListScreen
 
 @Composable
-fun NavGraph(navController: NavHostController) {
+fun NavGraph(
+    navController: NavHostController,
+    modifier: Modifier = Modifier
+) {
     NavHost(
         navController = navController,
-        startDestination = Screen.MarketList.route
+        startDestination = Screen.MarketList.route,
+        modifier = modifier
     ) {
         composable(route = Screen.MarketList.route) {
             MarketListScreen(navController = navController)

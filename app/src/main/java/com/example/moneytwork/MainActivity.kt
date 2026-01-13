@@ -21,9 +21,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             MoneytworkTheme {
                 val navController = rememberNavController()
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
                     NavGraph(
-                        navController = navController
+                        navController = navController,
+                        modifier = Modifier.padding(paddingValues)
                     )
                 }
             }
