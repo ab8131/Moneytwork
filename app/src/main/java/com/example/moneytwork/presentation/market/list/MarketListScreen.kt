@@ -21,26 +21,12 @@ fun MarketListScreen(
     viewModel: MarketListViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
-    val tabs = listOf(MarketTab.CRYPTO, MarketTab.STOCKS)
 
     Scaffold(
         topBar = {
-            Column {
-                TopAppBar(
-                    title = { Text("Moneytwork") }
-                )
-                TabRow(
-                    selectedTabIndex = state.selectedTabIndex
-                ) {
-                    tabs.forEachIndexed { index, tab ->
-                        Tab(
-                            selected = state.selectedTabIndex == index,
-                            onClick = { viewModel.onEvent(MarketListEvent.OnTabSelected(index)) },
-                            text = { Text(tab.title) }
-                        )
-                    }
-                }
-            }
+            TopAppBar(
+                title = { Text("Cryptocurrencies") }
+            )
         }
     ) { paddingValues ->
         Box(

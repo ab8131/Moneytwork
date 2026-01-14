@@ -8,8 +8,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.moneytwork.core.constants.Constants
+import com.example.moneytwork.presentation.community.CommunityScreen
 import com.example.moneytwork.presentation.market.detail.DetailScreen
 import com.example.moneytwork.presentation.market.list.MarketListScreen
+import com.example.moneytwork.presentation.portfolio.PortfolioScreen
 
 @Composable
 fun NavGraph(
@@ -18,13 +20,27 @@ fun NavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.MarketList.route,
+        startDestination = BottomNavItem.Portfolio.route,
         modifier = modifier
     ) {
-        composable(route = Screen.MarketList.route) {
+        // Bottom Nav Screens
+        composable(BottomNavItem.Portfolio.route) {
+            PortfolioScreen(navController = navController)
+        }
+
+        composable(BottomNavItem.Crypto.route) {
             MarketListScreen(navController = navController)
         }
 
+        composable(BottomNavItem.Stocks.route) {
+            MarketListScreen(navController = navController) // Reuse with filter for stocks
+        }
+
+        composable(BottomNavItem.Community.route) {
+            CommunityScreen()
+        }
+
+        // Detail Screens
         composable(
             route = Screen.CoinDetail.route,
             arguments = listOf(

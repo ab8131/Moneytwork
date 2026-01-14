@@ -9,3 +9,12 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
+
+// Custom colors for Moneytwork
+val PositiveGreen = Color(0xFF00C853)
+val NegativeRed = Color(0xFFD50000)
+val Bitcoin = Color(0xFFF7931A)
+val Ethereum = Color(0xFF627EEA)
+val ChartBlue = Color(0xFF2962FF)
+val GlassBackground = Color(0x40FFFFFF) // Frosted glass effect
+val GoldStar = Color(0xFFFFC107)
