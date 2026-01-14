@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.example.moneytwork.core.constants.Constants
 import com.example.moneytwork.data.local.database.MoneytworkDatabase
 import com.example.moneytwork.data.remote.api.CoinGeckoApi
+import com.example.moneytwork.data.remote.api.FinnhubApi
 import com.example.moneytwork.data.repository.CryptoRepositoryImpl
 import com.example.moneytwork.domain.repository.CryptoRepository
 import dagger.Module
@@ -47,6 +48,17 @@ object AppModule {
             .build()
             .create(CoinGeckoApi::class.java)
     }
+    @Provides
+    @Singleton
+    fun provideFinnhubApi(okHttpClient: OkHttpClient): FinnhubApi {
+        return Retrofit.Builder()
+            .baseUrl(Constants.FINNHUB_BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(FinnhubApi::class.java)
+    }
+
 
     @Provides
     @Singleton

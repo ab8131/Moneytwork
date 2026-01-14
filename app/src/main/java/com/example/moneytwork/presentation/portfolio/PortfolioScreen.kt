@@ -1,5 +1,6 @@
 package com.example.moneytwork.presentation.portfolio
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -62,11 +63,22 @@ fun PortfolioScreen(
             // Portfolio Info Card
             item {
                 GlassCard {
-                    Text(
-                        text = "Total Portfolio Value",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.White.copy(alpha = 0.7f)
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(4.dp, 24.dp)
+                                .background(MaterialTheme.colorScheme.primary)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = "Total Portfolio Value",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = formatCurrency(portfolioState.currentValue),
@@ -93,7 +105,7 @@ fun PortfolioScreen(
                         )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
-                    Divider(color = Color.White.copy(alpha = 0.2f))
+                    HorizontalDivider(color = Color.White.copy(alpha = 0.2f))
                     Spacer(modifier = Modifier.height(12.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -128,16 +140,24 @@ fun PortfolioScreen(
                     }
                 }
             }
-
-            // Top Cryptocurrencies Card
-            item {
-                GlassCard(
-                    onClick = { navController.navigate("crypto") }
-                ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                modifier = Modifier
+                                    .size(4.dp, 20.dp)
+                                    .background(MaterialTheme.colorScheme.primary)
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = "Top Cryptocurrencies",
+                                style = MaterialTheme.typography.titleLarge,
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                            color = MaterialTheme.colorScheme.primary
                     ) {
                         Text(
                             text = "Top Cryptocurrencies",
@@ -152,6 +172,7 @@ fun PortfolioScreen(
                         )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
+                    if (topCryptos.isNotEmpty()) {
                         topCryptos.take(3).forEachIndexed { index, coin ->
                             if (index > 0) {
                                 HorizontalDivider(
@@ -206,64 +227,25 @@ fun PortfolioScreen(
                                     }
                                 }
                             }
-                            }
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.weight(1f)
-                                ) {
-                                    coil.compose.AsyncImage(
-                                        model = coin.image,
-                                        contentDescription = coin.name,
-                                        modifier = Modifier.size(32.dp)
-                                    )
-                                    Spacer(modifier = Modifier.width(12.dp))
-                                    Column {
-                                        Text(
-                                            text = coin.name,
-                                            style = MaterialTheme.typography.bodyLarge,
-                                            fontWeight = FontWeight.SemiBold,
-                                            color = Color.White
-                                        )
-                                        Text(
-                                            text = coin.symbol.uppercase(),
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = Color.White.copy(alpha = 0.6f)
-                                        )
-                                    }
-                                }
-                                Column(horizontalAlignment = Alignment.End) {
-                                    Text(
-                                        text = formatCurrency(coin.currentPrice),
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        fontWeight = FontWeight.SemiBold,
-                                        color = Color.White
-                                    )
-                                    coin.priceChangePercentage24h?.let { change ->
-                                        Text(
-                                            text = "${if (change >= 0) "+" else ""}${String.format("%.2f", change)}%",
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = if (change >= 0) PositiveGreen else NegativeRed,
-                                            fontWeight = FontWeight.Medium
-                                        )
-                                    }
-                                }
-                            }
                         }
-                    } else {
-                        Text(
-                            text = "Loading...",
-                            color = Color.White.copy(alpha = 0.6f)
-                        )
-                    }
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                modifier = Modifier
+                                    .size(4.dp, 20.dp)
+                                    .background(MaterialTheme.colorScheme.primary)
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = "Top Stocks",
+                                style = MaterialTheme.typography.titleLarge,
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                 }
             }
 
-            // Top Stocks Card
+                            color = MaterialTheme.colorScheme.primary
             item {
                 GlassCard(
                     onClick = { navController.navigate("stocks") }
@@ -307,5 +289,6 @@ fun PortfolioScreen(
 private fun formatCurrency(value: Double): String {
     val formatter = NumberFormat.getCurrencyInstance(Locale.US)
     return formatter.format(value)
+}
 }
 

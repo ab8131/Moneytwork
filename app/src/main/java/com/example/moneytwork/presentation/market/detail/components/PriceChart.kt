@@ -95,11 +95,11 @@ fun PriceChart(
                     chart = lineChart(
                         lines = listOf(
                             LineChart.LineSpec(
-                                lineColor = Color(0xFF2962FF).hashCode(),
+                                lineColor = MaterialTheme.colorScheme.primary.hashCode(),
                                 lineBackgroundShader = DynamicShaders.fromBrush(
                                     Brush.verticalGradient(
                                         listOf(
-                                            Color(0xFF2962FF).copy(alpha = 0.5f),
+                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
                                             Color.Transparent
                                         )
                                     )
