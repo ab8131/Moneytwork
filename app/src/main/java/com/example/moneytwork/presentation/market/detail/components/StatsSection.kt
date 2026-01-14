@@ -4,9 +4,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.moneytwork.domain.model.CoinDetail
+import com.example.moneytwork.presentation.components.GlassCard
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -15,28 +17,23 @@ fun StatsSection(
     coinDetail: CoinDetail,
     modifier: Modifier = Modifier
 ) {
-    Card(
+    GlassCard(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            .padding(horizontal = 16.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
             Text(
                 text = "Statistics",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Market Cap
+        Text(
+            text = "Statistics",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            color = Color.White
+        )
             StatItem(
-                label = "Market Cap",
+        Spacer(modifier = Modifier.height(16.dp))
                 value = formatLargeNumber(coinDetail.marketCap)
             )
 
@@ -98,7 +95,7 @@ private fun StatItem(
     valueColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurface
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+    valueColor: androidx.compose.ui.graphics.Color = Color.White
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
@@ -107,7 +104,7 @@ private fun StatItem(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = value,
+            color = Color.White.copy(alpha = 0.7f)
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.SemiBold,
             color = valueColor

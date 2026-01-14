@@ -49,7 +49,7 @@ fun PortfolioScreen(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            item { Spacer(modifier = Modifier.height(8.dp)) }
+            item { Spacer(modifier = Modifier.height(4.dp)) }
 
             // Portfolio Info Card
             item {

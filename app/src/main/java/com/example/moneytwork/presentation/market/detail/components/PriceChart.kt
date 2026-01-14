@@ -9,9 +9,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.moneytwork.domain.model.ChartData
+import com.example.moneytwork.presentation.components.GlassCard
 import com.example.moneytwork.presentation.market.detail.ChartTimeframe
-import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
-import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.component.shape.shader.fromBrush
@@ -31,17 +30,11 @@ fun PriceChart(
 ) {
     val timeframes = ChartTimeframe.entries
 
-    Card(
+    GlassCard(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            .padding(16.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
             Text(
                 text = "Price Chart",
                 style = MaterialTheme.typography.titleLarge,
@@ -96,12 +89,46 @@ fun PriceChart(
                             )
                         ),
                         model = chartEntryModel,
-                        startAxis = rememberStartAxis(),
-                        bottomAxis = rememberBottomAxis(),
+                        startAxis = null, // Remove Y-axis grid
+                        bottomAxis = null, // Remove X-axis grid
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(250.dp)
                     )
+                }
+
+                // Price info below chart
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column {
+                        Text(
+                            text = "Low",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = Color.White.copy(alpha = 0.6f)
+                        )
+                        Text(
+                            text = "$${String.format("%.2f", chartData.prices.minOf { it.price })}",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.White,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                    Column(horizontalAlignment = androidx.compose.ui.Alignment.End) {
+                        Text(
+                            text = "High",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = Color.White.copy(alpha = 0.6f)
+                        )
+                        Text(
+                            text = "$${String.format("%.2f", chartData.prices.maxOf { it.price })}",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.White,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
                 }
             } else {
                 Box(

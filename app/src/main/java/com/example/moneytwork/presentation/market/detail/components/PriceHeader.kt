@@ -54,12 +54,13 @@ fun PriceHeader(
                         Text(
                             text = coinDetail.name,
                             style = MaterialTheme.typography.headlineSmall,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
                         )
                         Text(
                             text = coinDetail.symbol.uppercase(),
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = Color.White.copy(alpha = 0.7f)
                         )
                     }
                 }

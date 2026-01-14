@@ -6,7 +6,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -25,20 +25,33 @@ fun DetailScreen(
 ) {
     val state = viewModel.state.value
     val scrollState = rememberScrollState()
+    var selectedTabIndex by remember { mutableStateOf(0) }
+    val tabs = listOf("Graph", "Financials", "Ownership")
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(state.coinDetail?.name ?: "Loading...") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+            Column {
+                TopAppBar(
+                    title = { Text(state.coinDetail?.name ?: "Loading...") },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back"
+                            )
+                        }
+                    }
+                )
+                TabRow(selectedTabIndex = selectedTabIndex) {
+                    tabs.forEachIndexed { index, title ->
+                        Tab(
+                            selected = selectedTabIndex == index,
+                            onClick = { selectedTabIndex = index },
+                            text = { Text(title) }
                         )
                     }
                 }
-            )
+            }
         }
     ) { paddingValues ->
         Box(
@@ -84,48 +97,102 @@ fun DetailScreen(
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        // Price Chart
-                        PriceChart(
-                            chartData = state.chartData,
-                            selectedTimeframe = state.selectedTimeframe,
-                            onTimeframeSelected = { timeframe ->
-                                viewModel.onEvent(DetailEvent.OnTimeframeSelected(timeframe))
+                        // Tab Content
+                        when (selectedTabIndex) {
+                            0 -> {
+                                // Graph Tab
+                                PriceChart(
+                                    chartData = state.chartData,
+                                    selectedTimeframe = state.selectedTimeframe,
+                                    onTimeframeSelected = { timeframe ->
+                                        viewModel.onEvent(DetailEvent.OnTimeframeSelected(timeframe))
+                                    }
+                                )
                             }
-                        )
+                            1 -> {
+                                // Financials Tab
+                                StatsSection(coinDetail = state.coinDetail)
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                                Spacer(modifier = Modifier.height(8.dp))
 
-                        // Statistics
-                        StatsSection(coinDetail = state.coinDetail)
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        // Description (if available)
-                        if (state.coinDetail.description.isNotBlank()) {
-                            Card(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-                            ) {
-                                Column(
+                                // Description
+                                if (state.coinDetail.description.isNotBlank()) {
+                                    com.example.moneytwork.presentation.components.GlassCard(
+                                        modifier = Modifier.padding(16.dp)
+                                    ) {
+                                        Text(
+                                            text = "About ${state.coinDetail.name}",
+                                            style = MaterialTheme.typography.titleLarge,
+                                            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                                        )
+                                        Spacer(modifier = Modifier.height(12.dp))
+                                        Text(
+                                            text = state.coinDetail.description
+                                                .replace(Regex("<[^>]*>"), "")
+                                                .take(500) + if (state.coinDetail.description.length > 500) "..." else "",
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.7f)
+                                        )
+                                    }
+                                }
+                            }
+                            2 -> {
+                                // Ownership Tab
+                                com.example.moneytwork.presentation.components.GlassCard(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(16.dp)
                                 ) {
                                     Text(
-                                        text = "About ${state.coinDetail.name}",
+                                        text = "Your ${state.coinDetail.name} Holdings",
                                         style = MaterialTheme.typography.titleLarge,
                                         fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
                                     )
-                                    Spacer(modifier = Modifier.height(12.dp))
+                                    Spacer(modifier = Modifier.height(16.dp))
                                     Text(
-                                        text = state.coinDetail.description
-                                            .replace(Regex("<[^>]*>"), "") // Remove HTML tags
-                                            .take(500) + if (state.coinDetail.description.length > 500) "..." else "",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        text = "No holdings yet",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.6f)
                                     )
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Text(
+                                        text = "Record your first transaction to track your investment",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.4f)
+                                    )
+                                }
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Action Buttons - Record Transaction
+                        com.example.moneytwork.presentation.components.GlassCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                        ) {
+                            Text(
+                                text = "Track Investment",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                Button(
+                                    onClick = { /* TODO: Record Buy */ },
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Text("Record Buy")
+                                }
+                                OutlinedButton(
+                                    onClick = { /* TODO: Record Sell */ },
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Text("Record Sell")
                                 }
                             }
                         }
