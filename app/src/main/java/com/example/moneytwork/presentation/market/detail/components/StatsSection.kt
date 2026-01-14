@@ -22,68 +22,65 @@ fun StatsSection(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
     ) {
-            Text(
-                text = "Statistics",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
         Text(
             text = "Statistics",
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             color = Color.White
         )
-            StatItem(
+
         Spacer(modifier = Modifier.height(16.dp))
-                value = formatLargeNumber(coinDetail.marketCap)
-            )
 
-            Divider(modifier = Modifier.padding(vertical = 12.dp))
+        StatItem(
+            label = "Market Cap",
+            value = formatLargeNumber(coinDetail.marketCap)
+        )
 
-            // Volume
+        HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color.White.copy(alpha = 0.2f))
+
+        StatItem(
+            label = "24h Volume",
+            value = formatLargeNumber(coinDetail.totalVolume)
+        )
+
+        coinDetail.high24h?.let { high ->
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color.White.copy(alpha = 0.2f))
             StatItem(
-                label = "24h Volume",
-                value = formatLargeNumber(coinDetail.totalVolume)
+                label = "24h High",
+                value = formatPrice(high)
             )
+        }
 
-            coinDetail.high24h?.let { high ->
-                Divider(modifier = Modifier.padding(vertical = 12.dp))
-                StatItem(
-                    label = "24h High",
-                    value = formatPrice(high)
-                )
-            }
+        coinDetail.low24h?.let { low ->
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color.White.copy(alpha = 0.2f))
+            StatItem(
+                label = "24h Low",
+                value = formatPrice(low)
+            )
+        }
 
-            coinDetail.low24h?.let { low ->
-                Divider(modifier = Modifier.padding(vertical = 12.dp))
-                StatItem(
-                    label = "24h Low",
-                    value = formatPrice(low)
-                )
-            }
+        coinDetail.priceChangePercentage7d?.let { change ->
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color.White.copy(alpha = 0.2f))
+            StatItem(
+                label = "7d Change",
+                value = "${if (change >= 0) "+" else ""}${String.format("%.2f", change)}%",
+                valueColor = if (change >= 0)
+                    Color(0xFF00C853)
+                else
+                    Color(0xFFD50000)
+            )
+        }
 
-            coinDetail.priceChangePercentage7d?.let { change ->
-                Divider(modifier = Modifier.padding(vertical = 12.dp))
-                StatItem(
-                    label = "7d Change",
-                    value = "${if (change >= 0) "+" else ""}${String.format("%.2f", change)}%",
-                    valueColor = if (change >= 0)
-                        androidx.compose.ui.graphics.Color(0xFF00C853)
-                    else
-                        androidx.compose.ui.graphics.Color(0xFFD50000)
-                )
-            }
-
-            coinDetail.priceChangePercentage30d?.let { change ->
-                Divider(modifier = Modifier.padding(vertical = 12.dp))
-                StatItem(
-                    label = "30d Change",
-                    value = "${if (change >= 0) "+" else ""}${String.format("%.2f", change)}%",
-                    valueColor = if (change >= 0)
-                        androidx.compose.ui.graphics.Color(0xFF00C853)
-                    else
-                        androidx.compose.ui.graphics.Color(0xFFD50000)
-                )
-            }
+        coinDetail.priceChangePercentage30d?.let { change ->
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color.White.copy(alpha = 0.2f))
+            StatItem(
+                label = "30d Change",
+                value = "${if (change >= 0) "+" else ""}${String.format("%.2f", change)}%",
+                valueColor = if (change >= 0)
+                    Color(0xFF00C853)
+                else
+                    Color(0xFFD50000)
+            )
         }
     }
 }
@@ -92,19 +89,19 @@ fun StatsSection(
 private fun StatItem(
     label: String,
     value: String,
-    valueColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurface
+    valueColor: Color = Color.White
 ) {
     Row(
-    valueColor: androidx.compose.ui.graphics.Color = Color.White
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = Color.White.copy(alpha = 0.7f)
         )
         Text(
-            color = Color.White.copy(alpha = 0.7f)
+            text = value,
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.SemiBold,
             color = valueColor
