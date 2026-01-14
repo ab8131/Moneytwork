@@ -32,12 +32,11 @@ fun MarketListScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-            // Content
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f)
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                Box(
+                    modifier = Modifier
+                        .size(4.dp, 32.dp)
                         .background(MaterialTheme.colorScheme.primary)
                 )
                 Spacer(modifier = Modifier.width(12.dp))
@@ -48,13 +47,26 @@ fun MarketListScreen(
                     color = Color.White
                 )
             }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            when {
-                state.error.isNotBlank() -> {
+
+            // Content
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+            ) {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(state.coins) { coin ->
+                        CoinListItem(
+                            coin = coin,
+                            onItemClick = {
+                                navController.navigate(Screen.CoinDetail.createRoute(coin.id))
+                            }
+                        )
+                    }
+                    item { Spacer(modifier = Modifier.height(80.dp)) }
+                }
+
+                if (state.error.isNotBlank()) {
                     Column(
                         modifier = Modifier.align(Alignment.Center),
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -63,64 +75,19 @@ fun MarketListScreen(
                             text = state.error,
                             color = MaterialTheme.colorScheme.error,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(20.dp)
+                            modifier = Modifier.padding(20.dp)
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
                         Button(onClick = { viewModel.onEvent(MarketListEvent.Refresh) }) {
                             Text("Retry")
                         }
                     }
                 }
 
-                state.coins.isEmpty() && !state.isLoading -> {
-                    Column(
-                        modifier = Modifier.align(Alignment.Center),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = if (state.selectedTabIndex == 1)
-                                "Stocks coming soon!"
-                            else
-                                "No coins available",
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(20.dp)
-                        )
-                        if (state.selectedTabIndex == 1) {
-                            Text(
-                                text = "Stock market integration will be added next",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(horizontal = 20.dp)
-                            )
-                        }
-                    }
+                if (state.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
+                    )
                 }
-
-                else -> {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        items(state.coins) { coin ->
-                            CoinListItem(
-                                coin = coin,
-                                onItemClick = {
-                                    navController.navigate(Screen.CoinDetail.createRoute(coin.id))
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-
-            if (state.isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
             }
         }
     }

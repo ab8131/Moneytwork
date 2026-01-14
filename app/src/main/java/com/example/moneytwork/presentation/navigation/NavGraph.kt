@@ -34,8 +34,8 @@ fun NavGraph(
             MarketListScreen(navController = navController)
         }
 
+        composable(BottomNavItem.Stocks.route) {
             StockListScreen(navController = navController)
-            MarketListScreen(navController = navController) // Reuse with filter for stocks
         }
 
         composable(BottomNavItem.Community.route) {
@@ -55,7 +55,7 @@ fun NavGraph(
         }
 
         composable(route = Screen.Search.route) {
-            // SearchScreen(navController = navController)
+            SearchScreen(navController = navController)
         }
 
         composable(route = Screen.Watchlist.route) {

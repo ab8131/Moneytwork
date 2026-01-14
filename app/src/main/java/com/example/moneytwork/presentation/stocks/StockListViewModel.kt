@@ -9,6 +9,7 @@ import com.example.moneytwork.domain.usecase.GetStocksUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,7 +44,7 @@ class StockListViewModel @Inject constructor(
     }
 
     fun getStocks() {
-        viewModelScope.run {
+        viewModelScope.launch {
             getStocksUseCase(popularStocks).onEach { result ->
                 when (result) {
                     is Resource.Success -> {

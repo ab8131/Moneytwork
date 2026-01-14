@@ -78,6 +78,8 @@ object AppModule {
         api: CoinGeckoApi,
         db: MoneytworkDatabase
     ): CryptoRepository {
+        return CryptoRepositoryImpl(api, db.coinDao, db.watchlistDao)
+    }
 
     @Provides
     @Singleton
@@ -85,8 +87,6 @@ object AppModule {
         api: FinnhubApi
     ): StockRepository {
         return StockRepositoryImpl(api)
-    }
-        return CryptoRepositoryImpl(api, db.coinDao, db.watchlistDao)
     }
 }
 
