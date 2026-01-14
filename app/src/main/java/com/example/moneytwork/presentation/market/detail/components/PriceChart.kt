@@ -1,6 +1,7 @@
 package com.example.moneytwork.presentation.market.detail.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -90,8 +91,8 @@ fun PriceChart(
             }
 
             ProvideChartStyle {
-                    startAxis = rememberStartAxis(), // Horizontal grid lines
-                    bottomAxis = null, // No bottom axis
+                Chart(
+                    chart = lineChart(
                         lines = listOf(
                             LineChart.LineSpec(
                                 lineColor = Color(0xFF2962FF).hashCode(),
@@ -107,7 +108,7 @@ fun PriceChart(
                         )
                     ),
                     model = chartEntryModel,
-                    startAxis = null,
+                    startAxis = rememberStartAxis(),
                     bottomAxis = null,
                     modifier = Modifier
                         .fillMaxWidth()

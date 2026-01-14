@@ -1,9 +1,9 @@
 package com.example.moneytwork.presentation.portfolio
 
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,8 +16,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.moneytwork.presentation.components.GlassCard
 import com.example.moneytwork.presentation.market.list.MarketListViewModel
-import com.example.moneytwork.presentation.market.list.components.CoinListItem
-import com.example.moneytwork.presentation.navigation.Screen
 import com.example.moneytwork.ui.theme.NegativeRed
 import com.example.moneytwork.ui.theme.PositiveGreen
 import java.text.NumberFormat
@@ -38,6 +36,7 @@ fun PortfolioScreen(
 
     Scaffold(
         topBar = {
+            TopAppBar(
                 title = { Text("Portfolio") },
                 actions = {
                     IconButton(onClick = { navController.navigate("search") }) {
@@ -48,7 +47,6 @@ fun PortfolioScreen(
                         )
                     }
                 }
-                title = { Text("Portfolio") }
             )
         }
     ) { paddingValues ->
