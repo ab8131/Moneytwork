@@ -1,6 +1,7 @@
 package com.example.moneytwork.presentation.portfolio
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
@@ -37,7 +38,16 @@ fun PortfolioScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+                title = { Text("Portfolio") },
+                actions = {
+                    IconButton(onClick = { navController.navigate("search") }) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search",
+                            tint = Color.White
+                        )
+                    }
+                }
                 title = { Text("Portfolio") }
             )
         }
@@ -144,15 +154,107 @@ fun PortfolioScreen(
                         )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
-                    if (topCryptos.isNotEmpty()) {
-                        topCryptos.take(3).forEach { coin ->
-                            CoinListItem(
-                                coin = coin,
-                                onItemClick = {
-                                    navController.navigate(Screen.CoinDetail.createRoute(coin.id))
-                                },
-                                modifier = Modifier.padding(vertical = 4.dp)
-                            )
+                        topCryptos.take(3).forEachIndexed { index, coin ->
+                            if (index > 0) {
+                                HorizontalDivider(
+                                    modifier = Modifier.padding(vertical = 12.dp),
+                                    color = Color.White.copy(alpha = 0.1f),
+                                    thickness = 0.5.dp
+                                )
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    coil.compose.AsyncImage(
+                                        model = coin.image,
+                                        contentDescription = coin.name,
+                                        modifier = Modifier.size(32.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(12.dp))
+                                    Column {
+                                        Text(
+                                            text = coin.name,
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = Color.White
+                                        )
+                                        Text(
+                                            text = coin.symbol.uppercase(),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = Color.White.copy(alpha = 0.6f)
+                                        )
+                                    }
+                                }
+                                Column(horizontalAlignment = Alignment.End) {
+                                    Text(
+                                        text = formatCurrency(coin.currentPrice),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = Color.White
+                                    )
+                                    coin.priceChangePercentage24h?.let { change ->
+                                        Text(
+                                            text = "${if (change >= 0) "+" else ""}${String.format("%.2f", change)}%",
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = if (change >= 0) PositiveGreen else NegativeRed,
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                    }
+                                }
+                            }
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    coil.compose.AsyncImage(
+                                        model = coin.image,
+                                        contentDescription = coin.name,
+                                        modifier = Modifier.size(32.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(12.dp))
+                                    Column {
+                                        Text(
+                                            text = coin.name,
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = Color.White
+                                        )
+                                        Text(
+                                            text = coin.symbol.uppercase(),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = Color.White.copy(alpha = 0.6f)
+                                        )
+                                    }
+                                }
+                                Column(horizontalAlignment = Alignment.End) {
+                                    Text(
+                                        text = formatCurrency(coin.currentPrice),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = Color.White
+                                    )
+                                    coin.priceChangePercentage24h?.let { change ->
+                                        Text(
+                                            text = "${if (change >= 0) "+" else ""}${String.format("%.2f", change)}%",
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = if (change >= 0) PositiveGreen else NegativeRed,
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                    }
+                                }
+                            }
                         }
                     } else {
                         Text(

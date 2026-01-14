@@ -1,6 +1,6 @@
 package com.example.moneytwork.presentation.market.detail.components
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.example.moneytwork.domain.model.ChartData
 import com.example.moneytwork.presentation.components.GlassCard
 import com.example.moneytwork.presentation.market.detail.ChartTimeframe
+import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.component.shape.shader.fromBrush
@@ -44,17 +45,33 @@ fun PriceChart(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Timeframe selector
+        // Timeframe selector with pipes
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
         ) {
-            timeframes.forEach { timeframe ->
-                FilterChip(
-                    selected = selectedTimeframe == timeframe.days,
-                    onClick = { onTimeframeSelected(timeframe.days) },
-                    label = { Text(timeframe.label) }
+            timeframes.forEachIndexed { index, timeframe ->
+                Text(
+                    text = timeframe.label,
+                    modifier = Modifier.clickable { onTimeframeSelected(timeframe.days) },
+                    style = MaterialTheme.typography.labelLarge,
+                    color = if (selectedTimeframe == timeframe.days)
+                        MaterialTheme.colorScheme.primary
+                    else
+                        Color.White.copy(alpha = 0.6f),
+                    fontWeight = if (selectedTimeframe == timeframe.days)
+                        FontWeight.Bold
+                    else
+                        FontWeight.Normal
                 )
+                if (index < timeframes.size - 1) {
+                    Text(
+                        text = " | ",
+                        color = Color.White.copy(alpha = 0.3f),
+                        modifier = Modifier.padding(horizontal = 4.dp)
+                    )
+                }
             }
         }
 
@@ -73,8 +90,8 @@ fun PriceChart(
             }
 
             ProvideChartStyle {
-                Chart(
-                    chart = lineChart(
+                    startAxis = rememberStartAxis(), // Horizontal grid lines
+                    bottomAxis = null, // No bottom axis
                         lines = listOf(
                             LineChart.LineSpec(
                                 lineColor = Color(0xFF2962FF).hashCode(),

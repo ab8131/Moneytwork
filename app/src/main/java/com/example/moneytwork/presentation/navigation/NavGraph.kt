@@ -12,6 +12,7 @@ import com.example.moneytwork.presentation.community.CommunityScreen
 import com.example.moneytwork.presentation.market.detail.DetailScreen
 import com.example.moneytwork.presentation.market.list.MarketListScreen
 import com.example.moneytwork.presentation.portfolio.PortfolioScreen
+import com.example.moneytwork.presentation.search.SearchScreen
 
 @Composable
 fun NavGraph(
