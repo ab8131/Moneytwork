@@ -13,6 +13,7 @@ import com.example.moneytwork.presentation.market.detail.DetailScreen
 import com.example.moneytwork.presentation.market.list.MarketListScreen
 import com.example.moneytwork.presentation.portfolio.PortfolioScreen
 import com.example.moneytwork.presentation.search.SearchScreen
+import com.example.moneytwork.presentation.stocks.StockListScreen
 
 @Composable
 fun NavGraph(
@@ -33,7 +34,7 @@ fun NavGraph(
             MarketListScreen(navController = navController)
         }
 
-        composable(BottomNavItem.Stocks.route) {
+            StockListScreen(navController = navController)
             MarketListScreen(navController = navController) // Reuse with filter for stocks
         }
 

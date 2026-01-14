@@ -18,6 +18,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // API Keys from local.properties (not committed to git)
+        buildConfigField("String", "FINNHUB_API_KEY", "\"d5k1t3hr01qjaedsi5fgd5k1t3hr01qjaedsi5g0\"")
     }
 
     buildTypes {

@@ -35,30 +35,46 @@ fun PortfolioScreen(
     val topCryptos = marketState.coins.take(5)
     val profitLossColor = if (portfolioState.profitLoss >= 0) PositiveGreen else NegativeRed
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Portfolio") },
-                actions = {
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Header with search
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            modifier = Modifier
+                                .size(4.dp, 32.dp)
+                                .background(MaterialTheme.colorScheme.primary)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = "Portfolio",
+                            style = MaterialTheme.typography.headlineMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    }
                     IconButton(onClick = { navController.navigate("search") }) {
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = "Search",
-                            tint = Color.White
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(28.dp)
                         )
                     }
                 }
-            )
-        }
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            item { Spacer(modifier = Modifier.height(4.dp)) }
+                Spacer(modifier = Modifier.height(8.dp))
+            }
 
             // Portfolio Info Card
             item {
@@ -265,7 +281,7 @@ fun PortfolioScreen(
                             text = "View All →",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.primary
-                        )
+            item { Spacer(modifier = Modifier.height(80.dp)) }
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(

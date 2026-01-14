@@ -7,7 +7,9 @@ import com.example.moneytwork.data.local.database.MoneytworkDatabase
 import com.example.moneytwork.data.remote.api.CoinGeckoApi
 import com.example.moneytwork.data.remote.api.FinnhubApi
 import com.example.moneytwork.data.repository.CryptoRepositoryImpl
+import com.example.moneytwork.data.repository.StockRepositoryImpl
 import com.example.moneytwork.domain.repository.CryptoRepository
+import com.example.moneytwork.domain.repository.StockRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -76,6 +78,14 @@ object AppModule {
         api: CoinGeckoApi,
         db: MoneytworkDatabase
     ): CryptoRepository {
+
+    @Provides
+    @Singleton
+    fun provideStockRepository(
+        api: FinnhubApi
+    ): StockRepository {
+        return StockRepositoryImpl(api)
+    }
         return CryptoRepositoryImpl(api, db.coinDao, db.watchlistDao)
     }
 }

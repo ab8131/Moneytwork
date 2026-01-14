@@ -1,5 +1,6 @@
 package com.example.moneytwork.presentation.market.list
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -7,6 +8,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,13 +25,29 @@ fun MarketListScreen(
 ) {
     val state = viewModel.state.value
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Cryptocurrencies") }
-            )
-        }
-    ) { paddingValues ->
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            // Header
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+            // Content
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+            ) {
+                        .background(MaterialTheme.colorScheme.primary)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    text = "Cryptocurrencies",
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+            }
         Box(
             modifier = Modifier
                 .fillMaxSize()
