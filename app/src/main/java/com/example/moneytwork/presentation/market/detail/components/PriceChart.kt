@@ -35,110 +35,110 @@ fun PriceChart(
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-            Text(
-                text = "Price Chart",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
+        Text(
+            text = "Price Chart",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            color = Color.White
+        )
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            // Timeframe selector
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                timeframes.forEach { timeframe ->
-                    FilterChip(
-                        selected = selectedTimeframe == timeframe.days,
-                        onClick = { onTimeframeSelected(timeframe.days) },
-                        label = { Text(timeframe.label) }
-                    )
+        // Timeframe selector
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            timeframes.forEach { timeframe ->
+                FilterChip(
+                    selected = selectedTimeframe == timeframe.days,
+                    onClick = { onTimeframeSelected(timeframe.days) },
+                    label = { Text(timeframe.label) }
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Chart
+        if (chartData != null && chartData.prices.isNotEmpty()) {
+            val chartEntries = remember(chartData) {
+                chartData.prices.mapIndexed { index, point ->
+                    FloatEntry(index.toFloat(), point.price.toFloat())
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            val chartEntryModel = remember(chartEntries) {
+                entryModelOf(chartEntries)
+            }
 
-            // Chart
-            if (chartData != null && chartData.prices.isNotEmpty()) {
-                val chartEntries = remember(chartData) {
-                    chartData.prices.mapIndexed { index, point ->
-                        FloatEntry(index.toFloat(), point.price.toFloat())
-                    }
-                }
-
-                val chartEntryModel = remember(chartEntries) {
-                    entryModelOf(chartEntries)
-                }
-
-                ProvideChartStyle {
-                    Chart(
-                        chart = lineChart(
-                            lines = listOf(
-                                LineChart.LineSpec(
-                                    lineColor = Color(0xFF2962FF).hashCode(),
-                                    lineBackgroundShader = DynamicShaders.fromBrush(
-                                        Brush.verticalGradient(
-                                            listOf(
-                                                Color(0xFF2962FF).copy(alpha = 0.5f),
-                                                Color.Transparent
-                                            )
+            ProvideChartStyle {
+                Chart(
+                    chart = lineChart(
+                        lines = listOf(
+                            LineChart.LineSpec(
+                                lineColor = Color(0xFF2962FF).hashCode(),
+                                lineBackgroundShader = DynamicShaders.fromBrush(
+                                    Brush.verticalGradient(
+                                        listOf(
+                                            Color(0xFF2962FF).copy(alpha = 0.5f),
+                                            Color.Transparent
                                         )
                                     )
                                 )
                             )
-                        ),
-                        model = chartEntryModel,
-                        startAxis = null, // Remove Y-axis grid
-                        bottomAxis = null, // Remove X-axis grid
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(250.dp)
-                    )
-                }
-
-                // Price info below chart
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Column {
-                        Text(
-                            text = "Low",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = Color.White.copy(alpha = 0.6f)
                         )
-                        Text(
-                            text = "$${String.format("%.2f", chartData.prices.minOf { it.price })}",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = Color.White,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                    Column(horizontalAlignment = androidx.compose.ui.Alignment.End) {
-                        Text(
-                            text = "High",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = Color.White.copy(alpha = 0.6f)
-                        )
-                        Text(
-                            text = "$${String.format("%.2f", chartData.prices.maxOf { it.price })}",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = Color.White,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                }
-            } else {
-                Box(
+                    ),
+                    model = chartEntryModel,
+                    startAxis = null,
+                    bottomAxis = null,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(250.dp),
-                    contentAlignment = androidx.compose.ui.Alignment.Center
-                ) {
-                    CircularProgressIndicator()
+                        .height(250.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    Text(
+                        text = "Low",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Color.White.copy(alpha = 0.6f)
+                    )
+                    Text(
+                        text = "$${String.format("%.2f", chartData.prices.minOf { it.price })}",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Color.White,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
+                Column(horizontalAlignment = androidx.compose.ui.Alignment.End) {
+                    Text(
+                        text = "High",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Color.White.copy(alpha = 0.6f)
+                    )
+                    Text(
+                        text = "$${String.format("%.2f", chartData.prices.maxOf { it.price })}",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Color.White,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp),
+                contentAlignment = androidx.compose.ui.Alignment.Center
+            ) {
+                CircularProgressIndicator()
             }
         }
     }
