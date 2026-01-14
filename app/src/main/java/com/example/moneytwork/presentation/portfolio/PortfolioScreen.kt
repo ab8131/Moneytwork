@@ -99,7 +99,7 @@ fun PortfolioScreen(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "(${if (portfolioState.profitLossPercentage >= 0) "+" else ""}${String.format("%.2f", portfolioState.profitLossPercentage)}%)",
+                            text = "(${if (portfolioState.profitLossPercentage >= 0) "+" else ""}${String.format(Locale.US, "%.2f", portfolioState.profitLossPercentage)}%)",
                             style = MaterialTheme.typography.titleMedium,
                             color = profitLossColor
                         )
@@ -131,7 +131,7 @@ fun PortfolioScreen(
                                 color = Color.White.copy(alpha = 0.6f)
                             )
                             Text(
-                                text = "${String.format("%.2f", portfolioState.profitLossPercentage)}%",
+                                text = "${String.format(Locale.US, "%.2f", portfolioState.profitLossPercentage)}%",
                                 style = MaterialTheme.typography.titleMedium,
                                 color = profitLossColor,
                                 fontWeight = FontWeight.SemiBold
@@ -140,6 +140,17 @@ fun PortfolioScreen(
                     }
                 }
             }
+
+            // Top Cryptocurrencies Card
+            item {
+                GlassCard(
+                    onClick = { navController.navigate("crypto") }
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Box(
                                 modifier = Modifier
@@ -154,21 +165,10 @@ fun PortfolioScreen(
                                 fontWeight = FontWeight.Bold
                             )
                         }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                            color = MaterialTheme.colorScheme.primary
-                    ) {
-                        Text(
-                            text = "Top Cryptocurrencies",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold
-                        )
                         Text(
                             text = "View All →",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color.White.copy(alpha = 0.7f)
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
@@ -219,7 +219,7 @@ fun PortfolioScreen(
                                     )
                                     coin.priceChangePercentage24h?.let { change ->
                                         Text(
-                                            text = "${if (change >= 0) "+" else ""}${String.format("%.2f", change)}%",
+                                            text = "${if (change >= 0) "+" else ""}${String.format(Locale.US, "%.2f", change)}%",
                                             style = MaterialTheme.typography.bodyMedium,
                                             color = if (change >= 0) PositiveGreen else NegativeRed,
                                             fontWeight = FontWeight.Medium
@@ -228,6 +228,25 @@ fun PortfolioScreen(
                                 }
                             }
                         }
+                    } else {
+                        Text(
+                            text = "Loading...",
+                            color = Color.White.copy(alpha = 0.6f)
+                        )
+                    }
+                }
+            }
+
+            // Top Stocks Card
+            item {
+                GlassCard(
+                    onClick = { navController.navigate("stocks") }
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Box(
                                 modifier = Modifier
@@ -242,29 +261,10 @@ fun PortfolioScreen(
                                 fontWeight = FontWeight.Bold
                             )
                         }
-                }
-            }
-
-                            color = MaterialTheme.colorScheme.primary
-            item {
-                GlassCard(
-                    onClick = { navController.navigate("stocks") }
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Top Stocks",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold
-                        )
                         Text(
                             text = "View All →",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color.White.copy(alpha = 0.7f)
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
@@ -289,6 +289,5 @@ fun PortfolioScreen(
 private fun formatCurrency(value: Double): String {
     val formatter = NumberFormat.getCurrencyInstance(Locale.US)
     return formatter.format(value)
-}
 }
 
