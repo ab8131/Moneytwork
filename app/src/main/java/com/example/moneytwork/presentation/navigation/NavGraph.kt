@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.moneytwork.core.constants.Constants
+import com.example.moneytwork.presentation.market.detail.DetailScreen
 import com.example.moneytwork.presentation.market.list.MarketListScreen
 
 @Composable
@@ -32,7 +33,7 @@ fun NavGraph(
                 }
             )
         ) {
-            // DetailScreen(navController = navController)
+            DetailScreen(navController = navController)
         }
 
         composable(route = Screen.Search.route) {
