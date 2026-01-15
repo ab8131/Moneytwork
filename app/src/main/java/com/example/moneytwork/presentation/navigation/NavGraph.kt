@@ -14,6 +14,7 @@ import com.example.moneytwork.presentation.market.list.MarketListScreen
 import com.example.moneytwork.presentation.portfolio.PortfolioScreen
 import com.example.moneytwork.presentation.search.SearchScreen
 import com.example.moneytwork.presentation.stocks.StockListScreen
+import com.example.moneytwork.presentation.stocks.detail.StockDetailScreen
 
 @Composable
 fun NavGraph(
@@ -52,6 +53,17 @@ fun NavGraph(
             )
         ) {
             DetailScreen(navController = navController)
+
+        composable(
+            route = "stock_detail/{symbol}",
+            arguments = listOf(
+                navArgument("symbol") {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            StockDetailScreen(navController = navController)
+        }
         }
 
         composable(route = Screen.Search.route) {

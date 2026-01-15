@@ -281,7 +281,7 @@ fun PortfolioScreen(
                 }
             }
 
-            item { Spacer(modifier = Modifier.height(16.dp)) }
+            item { Spacer(modifier = Modifier.height(80.dp)) }
         }
     }
 }

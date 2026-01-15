@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.getValue
@@ -41,19 +42,24 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    containerColor = Color.Transparent,
+                    containerColor = MaterialTheme.colorScheme.background,
                     bottomBar = {
-                        NavigationBar(
-                            containerColor = Color.Transparent,
-                            modifier = Modifier.background(
-                                brush = Brush.verticalGradient(
-                                    colors = listOf(
-                                        Color.Transparent,
-                                        Color(0x20FFFFFF),
-                                        Color(0x40FFFFFF)
+                        Surface(
+                            color = Color.Transparent,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(
+                                            Color.Transparent,
+                                            Color(0x15FFFFFF),
+                                            Color(0x25FFFFFF)
+                                        )
                                     )
                                 )
-                            )
+                        ) {
+                        NavigationBar(
+                            containerColor = Color.Transparent
                         ) {
                             bottomNavItems.forEach { item ->
                                 NavigationBarItem(
@@ -78,6 +84,7 @@ class MainActivity : ComponentActivity() {
                                     )
                                 )
                             }
+                        }
                         }
                     }
                 ) { paddingValues ->

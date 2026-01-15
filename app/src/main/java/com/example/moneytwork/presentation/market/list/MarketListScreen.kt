@@ -4,8 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,27 +28,69 @@ fun MarketListScreen(
     viewModel: MarketListViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
+    var searchQuery by remember { mutableStateOf("") }
+
+    val filteredCoins = if (searchQuery.isBlank()) {
+        state.coins
+    } else {
+        state.coins.filter {
+            it.name.contains(searchQuery, ignoreCase = true) ||
+            it.symbol.contains(searchQuery, ignoreCase = true)
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             // Header
-            Row(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(16.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(4.dp, 32.dp)
-                        .background(MaterialTheme.colorScheme.primary)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = "Cryptocurrencies",
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(4.dp, 32.dp)
+                            .background(MaterialTheme.colorScheme.primary)
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = "Cryptocurrencies",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Search Field
+                TextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = { Text("Search coins...", color = Color.White.copy(alpha = 0.6f)) },
+                    leadingIcon = {
+                        Icon(Icons.Default.Search, "Search", tint = MaterialTheme.colorScheme.primary)
+                    },
+                    trailingIcon = {
+                        if (searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { searchQuery = "" }) {
+                                Icon(Icons.Default.Close, "Clear", tint = Color.White.copy(alpha = 0.6f))
+                            }
+                        }
+                    },
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White.copy(alpha = 0.1f),
+                        unfocusedContainerColor = Color.White.copy(alpha = 0.05f),
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        cursorColor = MaterialTheme.colorScheme.primary,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(12.dp),
+                    singleLine = true
                 )
             }
 
@@ -55,7 +101,7 @@ fun MarketListScreen(
                     .weight(1f)
             ) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(state.coins) { coin ->
+                    items(filteredCoins) { coin ->
                         CoinListItem(
                             coin = coin,
                             onItemClick = {
