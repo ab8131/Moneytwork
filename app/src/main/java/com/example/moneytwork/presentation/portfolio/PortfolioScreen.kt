@@ -35,30 +35,32 @@ fun PortfolioScreen(
     val topCryptos = marketState.coins.take(5)
     val profitLossColor = if (portfolioState.profitLoss >= 0) PositiveGreen else NegativeRed
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Portfolio") },
-                actions = {
-                    IconButton(onClick = { navController.navigate("search") }) {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "Search",
-                            tint = Color.White
-                        )
-                    }
-                }
-            )
-        }
-    ) { paddingValues ->
+    Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            item { Spacer(modifier = Modifier.height(4.dp)) }
+            // Header
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(4.dp, 32.dp)
+                            .background(MaterialTheme.colorScheme.primary)
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = "Portfolio",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                }
+                Spacer(modifier = Modifier.height(20.dp))
+            }
 
             // Portfolio Info Card
             item {

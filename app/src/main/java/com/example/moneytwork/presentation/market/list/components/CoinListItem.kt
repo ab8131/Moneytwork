@@ -27,25 +27,13 @@ fun CoinListItem(
         Color(0xFFD50000)
     }
 
-    Card(
+    Row(
         modifier = modifier
             .fillMaxWidth()
             .clickable { onItemClick() }
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Coin Image
-            AsyncImage(
-                model = coin.image,
-                contentDescription = coin.name,
-                modifier = Modifier.size(40.dp)
-            )
 
             Spacer(modifier = Modifier.width(16.dp))
 
@@ -53,18 +41,19 @@ fun CoinListItem(
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                Text(
-                    text = coin.name,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    text = coin.symbol.uppercase(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+            Text(
+                text = coin.name,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = Color.White
+            )
+            Text(
+                text = coin.symbol.uppercase(),
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.White.copy(alpha = 0.7f)
+            )
             }
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -78,14 +67,19 @@ fun CoinListItem(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
-                coin.priceChangePercentage24h?.let { change ->
-                    Text(
-                        text = "${if (change >= 0) "+" else ""}${String.format("%.2f", change)}%",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = priceChangeColor,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
+            Text(
+                text = formatPrice(coin.currentPrice),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.White
+            )
+            coin.priceChangePercentage24h?.let { change ->
+                Text(
+                    text = "${if (change >= 0) "+" else ""}${String.format("%.2f", change)}%",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = priceChangeColor,
+                    fontWeight = FontWeight.Medium
+                )
             }
         }
     }

@@ -58,13 +58,13 @@ fun MarketListScreen(
                         text = "Cryptocurrencies",
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
+                    color = Color.White
+                )
+            }
 
-                Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-                // Search Field
+            // Search Field
                 TextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
