@@ -142,26 +142,19 @@ fun StockListItem(
 ) {
     val priceChangeColor = if (stock.priceChange >= 0) PositiveGreen else NegativeRed
 
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clickable { onItemClick() },
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White.copy(alpha = 0.05f)
-        )
-    ) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .clickable { onItemClick() }
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = stock.symbol,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
@@ -171,6 +164,8 @@ fun StockListItem(
                     color = Color.White.copy(alpha = 0.7f)
                 )
             }
+
+            Spacer(modifier = Modifier.width(8.dp))
 
             Column(horizontalAlignment = Alignment.End) {
                 Text(
@@ -187,6 +182,11 @@ fun StockListItem(
                 )
             }
         }
+        HorizontalDivider(
+            modifier = Modifier.padding(start = 16.dp),
+            color = Color.White.copy(alpha = 0.1f),
+            thickness = 0.5.dp
+        )
     }
 }
 

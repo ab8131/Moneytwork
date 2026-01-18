@@ -22,6 +22,7 @@ class DetailViewModel @Inject constructor(
     private val getCoinDetailUseCase: GetCoinDetailUseCase,
     private val getCoinChartUseCase: GetCoinChartUseCase,
     private val toggleWatchlistUseCase: ToggleWatchlistUseCase,
+    private val addTransactionUseCase: com.example.moneytwork.domain.usecase.AddTransactionUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -52,6 +53,16 @@ class DetailViewModel @Inject constructor(
             is DetailEvent.Refresh -> {
                 getCoinDetail()
                 getChartData(_state.value.selectedTimeframe)
+            }
+            is DetailEvent.AddTransaction -> {
+                viewModelScope.launch {
+                    try {
+                        addTransactionUseCase(event.transaction)
+                        Log.d("DetailViewModel", "Transaction added successfully")
+                    } catch (e: Exception) {
+                        Log.e("DetailViewModel", "Error adding transaction: ${e.message}")
+                    }
+                }
             }
         }
     }

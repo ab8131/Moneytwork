@@ -7,7 +7,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +31,7 @@ fun StockDetailScreen(
 ) {
     val state = viewModel.state.value
     val scrollState = rememberScrollState()
+    var showTransactionDialog by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         when {
@@ -180,16 +181,10 @@ fun StockDetailScreen(
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             Button(
-                                onClick = { /* TODO: Record Buy */ },
+                                onClick = { showTransactionDialog = true },
                                 modifier = Modifier.weight(1f)
                             ) {
-                                Text("Record Buy")
-                            }
-                            OutlinedButton(
-                                onClick = { /* TODO: Record Sell */ },
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                Text("Record Sell")
+                                Text("Record Transaction")
                             }
                         }
                     }
@@ -198,6 +193,23 @@ fun StockDetailScreen(
                 }
             }
         }
+
+    // Transaction Dialog
+    if (showTransactionDialog && state.stock != null) {
+        com.example.moneytwork.presentation.components.AddTransactionDialog(
+            assetId = state.stock.symbol,
+            assetName = state.stock.name,
+            assetSymbol = state.stock.symbol,
+            assetType = com.example.moneytwork.domain.model.AssetType.STOCK,
+            currentPrice = state.stock.currentPrice,
+            onDismiss = { showTransactionDialog = false },
+            onConfirm = { transaction ->
+                viewModel.addTransaction(transaction)
+                showTransactionDialog = false
+            }
+        )
+    }
+
 
         if (state.isLoading) {
             CircularProgressIndicator(

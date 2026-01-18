@@ -27,12 +27,15 @@ import java.util.Locale
 fun PortfolioScreen(
     navController: NavController,
     portfolioViewModel: PortfolioViewModel = hiltViewModel(),
-    marketViewModel: MarketListViewModel = hiltViewModel()
+    marketViewModel: MarketListViewModel = hiltViewModel(),
+    stockViewModel: com.example.moneytwork.presentation.stocks.StockListViewModel = hiltViewModel()
 ) {
     val portfolioState = portfolioViewModel.state.value
     val marketState = marketViewModel.state.value
+    val stockState = stockViewModel.state.value
 
     val topCryptos = marketState.coins.take(5)
+    val topStocks = stockState.stocks.take(5)
     val profitLossColor = if (portfolioState.profitLoss >= 0) PositiveGreen else NegativeRed
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -270,16 +273,57 @@ fun PortfolioScreen(
                         )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "Coming Soon",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Color.White.copy(alpha = 0.6f)
-                    )
-                    Text(
-                        text = "Stock market integration will be added next",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.White.copy(alpha = 0.4f)
-                    )
+                    if (topStocks.isNotEmpty()) {
+                        topStocks.take(3).forEachIndexed { index, stock ->
+                            if (index > 0) {
+                                HorizontalDivider(
+                                    modifier = Modifier.padding(vertical = 12.dp),
+                                    color = Color.White.copy(alpha = 0.1f),
+                                    thickness = 0.5.dp
+                                )
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column(
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Text(
+                                        text = stock.symbol,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = Color.White
+                                    )
+                                    Text(
+                                        text = stock.name,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = Color.White.copy(alpha = 0.6f)
+                                    )
+                                }
+                                Column(horizontalAlignment = Alignment.End) {
+                                    Text(
+                                        text = formatCurrency(stock.currentPrice),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = Color.White
+                                    )
+                                    Text(
+                                        text = "${if (stock.priceChange >= 0) "+" else ""}${String.format(Locale.US, "%.2f", stock.priceChangePercentage)}%",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = if (stock.priceChange >= 0) PositiveGreen else NegativeRed,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                }
+                            }
+                        }
+                    } else {
+                        Text(
+                            text = "Loading...",
+                            color = Color.White.copy(alpha = 0.6f)
+                        )
+                    }
                 }
             }
 

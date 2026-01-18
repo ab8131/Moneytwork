@@ -53,6 +53,7 @@ fun NavGraph(
             )
         ) {
             DetailScreen(navController = navController)
+        }
 
         composable(
             route = "stock_detail/{symbol}",
@@ -63,7 +64,6 @@ fun NavGraph(
             )
         ) {
             StockDetailScreen(navController = navController)
-        }
         }
 
         composable(route = Screen.Search.route) {

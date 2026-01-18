@@ -27,6 +27,7 @@ fun DetailScreen(
     val scrollState = rememberScrollState()
     var selectedTabIndex by remember { mutableStateOf(0) }
     val tabs = listOf("Graph", "Financials", "Ownership")
+    var showTransactionDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -183,16 +184,10 @@ fun DetailScreen(
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 Button(
-                                    onClick = { /* TODO: Record Buy */ },
+                                    onClick = { showTransactionDialog = true },
                                     modifier = Modifier.weight(1f)
                                 ) {
-                                    Text("Record Buy")
-                                }
-                                OutlinedButton(
-                                    onClick = { /* TODO: Record Sell */ },
-                                    modifier = Modifier.weight(1f)
-                                ) {
-                                    Text("Record Sell")
+                                    Text("Record Transaction")
                                 }
                             }
                         }
@@ -224,6 +219,22 @@ fun DetailScreen(
                 )
             }
         }
+    }
+
+    // Transaction Dialog
+    if (showTransactionDialog && state.coinDetail != null) {
+        com.example.moneytwork.presentation.components.AddTransactionDialog(
+            assetId = state.coinDetail.id,
+            assetName = state.coinDetail.name,
+            assetSymbol = state.coinDetail.symbol,
+            assetType = com.example.moneytwork.domain.model.AssetType.CRYPTO,
+            currentPrice = state.coinDetail.currentPrice,
+            onDismiss = { showTransactionDialog = false },
+            onConfirm = { transaction ->
+                viewModel.onEvent(DetailEvent.AddTransaction(transaction))
+                showTransactionDialog = false
+            }
+        )
     }
 }
 

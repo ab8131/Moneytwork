@@ -27,24 +27,52 @@ class CryptoRepositoryImpl @Inject constructor(
 ) : CryptoRepository {
 
     override fun getCoins(forceRefresh: Boolean): Flow<Resource<List<Coin>>> = flow {
-        Log.d("CryptoRepository", "getCoins called")
+        Log.d("CryptoRepository", "=== getCoins START ===")
         emit(Resource.Loading())
 
-        // Fetch from API
+        // Try to fetch from API first
         try {
-            Log.d("CryptoRepository", "Fetching from API...")
+            Log.d("CryptoRepository", "Attempting to fetch from API...")
             val remoteCoins = api.getMarketCoins()
-            Log.d("CryptoRepository", "API returned ${remoteCoins.size} coins")
+            Log.d("CryptoRepository", "✓ API SUCCESS: received ${remoteCoins.size} coins")
+
             val entities = remoteCoins.map { it.toEntity() }
             coinDao.clearCoins()
             coinDao.insertCoins(entities)
+            Log.d("CryptoRepository", "✓ Cached ${entities.size} coins to database")
 
             emit(Resource.Success(entities.map { it.toCoin() }))
-            Log.d("CryptoRepository", "Success emitted")
+            Log.d("CryptoRepository", "✓ Emitted success with ${entities.size} coins")
+        } catch (e: java.net.UnknownHostException) {
+            Log.e("CryptoRepository", "✗ DNS Error: ${e.message}")
+            Log.e("CryptoRepository", "Attempting to load from cache...")
+
+            // Try to load from cache as fallback
+            try {
+                val cachedCoins = coinDao.getCoins()
+                cachedCoins.collect { coins ->
+                    if (coins.isNotEmpty()) {
+                        Log.d("CryptoRepository", "✓ Loaded ${coins.size} coins from cache")
+                        emit(Resource.Success(coins.map { it.toCoin() }))
+                    } else {
+                        Log.e("CryptoRepository", "✗ Cache is empty")
+                        emit(Resource.Error("No internet connection and no cached data available"))
+                    }
+                }
+            } catch (cacheError: Exception) {
+                Log.e("CryptoRepository", "✗ Cache load failed: ${cacheError.message}")
+                emit(Resource.Error("Cannot connect: ${e.message}"))
+            }
+        } catch (e: java.io.IOException) {
+            Log.e("CryptoRepository", "✗ Network Error: ${e.message}")
+            emit(Resource.Error("Network error: ${e.message}"))
         } catch (e: Exception) {
-            Log.e("CryptoRepository", "Error: ${e.message}", e)
-            emit(Resource.Error(e.localizedMessage ?: "An error occurred"))
+            Log.e("CryptoRepository", "✗ Unexpected Error: ${e.javaClass.simpleName} - ${e.message}")
+            e.printStackTrace()
+            emit(Resource.Error("Error: ${e.message}"))
         }
+
+        Log.d("CryptoRepository", "=== getCoins END ===")
     }
 
     override fun getCoinDetail(coinId: String): Flow<Resource<CoinDetail>> = flow {

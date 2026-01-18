@@ -7,8 +7,10 @@ import com.example.moneytwork.data.local.database.MoneytworkDatabase
 import com.example.moneytwork.data.remote.api.CoinGeckoApi
 import com.example.moneytwork.data.remote.api.FinnhubApi
 import com.example.moneytwork.data.repository.CryptoRepositoryImpl
+import com.example.moneytwork.data.repository.PortfolioRepositoryImpl
 import com.example.moneytwork.data.repository.StockRepositoryImpl
 import com.example.moneytwork.domain.repository.CryptoRepository
+import com.example.moneytwork.domain.repository.PortfolioRepository
 import com.example.moneytwork.domain.repository.StockRepository
 import dagger.Module
 import dagger.Provides
@@ -34,9 +36,10 @@ object AppModule {
         
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
             .build()
     }
 
@@ -69,7 +72,9 @@ object AppModule {
             app,
             MoneytworkDatabase::class.java,
             Constants.DATABASE_NAME
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides
@@ -84,9 +89,20 @@ object AppModule {
     @Provides
     @Singleton
     fun provideStockRepository(
-        api: FinnhubApi
+        api: FinnhubApi,
+        db: MoneytworkDatabase
     ): StockRepository {
-        return StockRepositoryImpl(api)
+        return StockRepositoryImpl(api, db.stockDao)
+    }
+
+    @Provides
+    @Singleton
+    fun providePortfolioRepository(
+        db: MoneytworkDatabase,
+        cryptoRepository: CryptoRepository,
+        stockRepository: StockRepository
+    ): PortfolioRepository {
+        return PortfolioRepositoryImpl(db.transactionDao, cryptoRepository, stockRepository)
     }
 }
 

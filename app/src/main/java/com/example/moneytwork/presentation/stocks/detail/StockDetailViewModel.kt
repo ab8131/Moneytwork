@@ -16,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class StockDetailViewModel @Inject constructor(
     private val repository: StockRepository,
+    private val addTransactionUseCase: com.example.moneytwork.domain.usecase.AddTransactionUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -51,6 +52,16 @@ class StockDetailViewModel @Inject constructor(
     fun refresh() {
         state.value.stock?.let { stock ->
             getStockDetail(stock.symbol)
+        }
+    }
+
+    fun addTransaction(transaction: com.example.moneytwork.domain.model.Transaction) {
+        viewModelScope.launch {
+            try {
+                addTransactionUseCase(transaction)
+            } catch (e: Exception) {
+                // Handle error
+            }
         }
     }
 }
