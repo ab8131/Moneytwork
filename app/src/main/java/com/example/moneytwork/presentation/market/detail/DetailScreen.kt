@@ -26,7 +26,7 @@ fun DetailScreen(
     val state = viewModel.state.value
     val scrollState = rememberScrollState()
     var selectedTabIndex by remember { mutableStateOf(0) }
-    val tabs = listOf("Graph", "Financials", "Ownership")
+    val tabs = listOf("Graph", "Financials", "Ownership", "Chat")
     var showTransactionDialog by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -160,6 +160,22 @@ fun DetailScreen(
                                         text = "Record your first transaction to track your investment",
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.4f)
+                                    )
+                                }
+                            }
+                            3 -> {
+                                // Chat Tab
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp)
+                                ) {
+                                    com.example.moneytwork.presentation.chat.ChatSection(
+                                        assetId = state.coinDetail.id,
+                                        assetName = state.coinDetail.name,
+                                        onSignInRequired = {
+                                            navController.navigate("sign_in")
+                                        }
                                     )
                                 }
                             }

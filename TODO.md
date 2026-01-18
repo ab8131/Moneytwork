@@ -19,6 +19,9 @@ A platform to track stocks/crypto prices with social media integration. Users ca
 - [x] Dual input for transactions (quantity OR total amount)
 - [x] Search functionality for crypto
 - [x] Poppins font family
+- [x] **Authentication system (Sign Up/Sign In)**
+- [x] **Real-time group chat per asset**
+- [x] **Firebase integration**
 
 ### Technical Infrastructure
 - [x] Room database (v4) with caching
@@ -28,12 +31,17 @@ A platform to track stocks/crypto prices with social media integration. Users ca
 - [x] Real-time price fetching
 - [x] Navigation setup
 - [x] Hilt dependency injection
+- [x] **Firebase Authentication**
+- [x] **Firestore real-time database**
+- [x] **User profiles in Firestore**
 
 ### Database Schema
 - [x] CoinEntity - Crypto cache
 - [x] StockEntity - Stock cache  
 - [x] TransactionEntity - User transactions
 - [x] WatchlistEntity - User favorites
+- [x] **Firestore Users collection**
+- [x] **Firestore Chat messages**
 
 ---
 
@@ -56,18 +64,22 @@ A platform to track stocks/crypto prices with social media integration. Users ca
 - [ ] **Pull-to-refresh** - Manual refresh for price data
 - [ ] **Top stocks on home** - Currently added but may need polish
 
-### Data & Performance
+## ���� PARTNER'S TASKS (Optional Enhancements)
 - [ ] **Background price updates** - Update portfolio values periodically
-- [ ] **Stock price in portfolio calculation** - Fetch real-time stock prices
+Core features are done! Partner can enhance:
 - [ ] **Transaction validation** - Prevent selling more than owned
-- [ ] **Export transactions** - CSV or PDF reports
-
----
-
-## 📋 PARTNER'S TASKS (Authentication & Social)
-
-These are primarily your partner's responsibility:
-
+- [x] Firebase Authentication setup (YOU DID IT!)
+- [x] User login/signup screens (YOU DID IT!)
+- [x] User profiles (Basic implementation done)
+- [x] Group chats per asset (YOU DID IT!)
+- [x] Real-time messaging (YOU DID IT!)
+- [x] Firebase Firestore for chat storage (YOU DID IT!)
+- [ ] User profile pictures/avatars
+- [ ] User mentions/notifications (@username)
+- [ ] Chat moderation (report, block users)
+- [ ] Push notifications for messages
+- [ ] Password reset functionality
+- [ ] Google Sign-In integration
 - [ ] Firebase Authentication setup
 - [ ] User login/signup screens
 - [ ] User profiles

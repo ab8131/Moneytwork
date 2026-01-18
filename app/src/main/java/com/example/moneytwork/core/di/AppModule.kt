@@ -6,12 +6,10 @@ import com.example.moneytwork.core.constants.Constants
 import com.example.moneytwork.data.local.database.MoneytworkDatabase
 import com.example.moneytwork.data.remote.api.CoinGeckoApi
 import com.example.moneytwork.data.remote.api.FinnhubApi
-import com.example.moneytwork.data.repository.CryptoRepositoryImpl
-import com.example.moneytwork.data.repository.PortfolioRepositoryImpl
-import com.example.moneytwork.data.repository.StockRepositoryImpl
-import com.example.moneytwork.domain.repository.CryptoRepository
-import com.example.moneytwork.domain.repository.PortfolioRepository
-import com.example.moneytwork.domain.repository.StockRepository
+import com.example.moneytwork.data.repository.*
+import com.example.moneytwork.domain.repository.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -104,5 +102,31 @@ object AppModule {
     ): PortfolioRepository {
         return PortfolioRepositoryImpl(db.transactionDao, cryptoRepository, stockRepository)
     }
-}
 
+    // Firebase
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(
+        auth: FirebaseAuth,
+        firestore: FirebaseFirestore
+    ): AuthRepository {
+        return AuthRepositoryImpl(auth, firestore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideChatRepository(
+        firestore: FirebaseFirestore,
+        authRepository: AuthRepository
+    ): ChatRepository {
+        return ChatRepositoryImpl(firestore, authRepository)
+    }
+}

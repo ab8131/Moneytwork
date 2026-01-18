@@ -32,8 +32,40 @@ fun StockDetailScreen(
     val state = viewModel.state.value
     val scrollState = rememberScrollState()
     var showTransactionDialog by remember { mutableStateOf(false) }
+    var selectedTabIndex by remember { mutableStateOf(0) }
+    val tabs = listOf("Overview", "Chat")
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Scaffold(
+        topBar = {
+            Column {
+                TopAppBar(
+                    title = { Text(state.stock?.symbol ?: "Loading...") },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back"
+                            )
+                        }
+                    }
+                )
+                TabRow(selectedTabIndex = selectedTabIndex) {
+                    tabs.forEachIndexed { index, title ->
+                        Tab(
+                            selected = selectedTabIndex == index,
+                            onClick = { selectedTabIndex = index },
+                            text = { Text(title) }
+                        )
+                    }
+                }
+            }
+        }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
         when {
             state.error.isNotBlank() -> {
                 Column(
@@ -54,161 +86,152 @@ fun StockDetailScreen(
             }
 
             state.stock != null -> {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(scrollState)
-                        .padding(16.dp)
-                ) {
-                    // Back button + Header
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Back",
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(28.dp)
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Box(
+                when (selectedTabIndex) {
+                    0 -> {
+                        // Overview Tab
+                        Column(
                             modifier = Modifier
-                                .size(4.dp, 24.dp)
-                                .background(MaterialTheme.colorScheme.primary)
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(
-                            text = state.stock.symbol,
-                            style = MaterialTheme.typography.headlineMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    // Price Header
-                    GlassCard {
-                        Text(
-                            text = state.stock.name,
-                            style = MaterialTheme.typography.titleLarge,
-                            color = Color.White.copy(alpha = 0.7f)
-                        )
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        Text(
-                            text = formatCurrency(state.stock.currentPrice),
-                            style = MaterialTheme.typography.displaySmall,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 36.sp,
-                            color = Color.White
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        val priceChangeColor = if (state.stock.priceChange >= 0) PositiveGreen else NegativeRed
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = "${if (state.stock.priceChange >= 0) "+" else ""}${formatCurrency(state.stock.priceChange)}",
-                                style = MaterialTheme.typography.titleLarge,
-                                color = priceChangeColor,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = "(${if (state.stock.priceChangePercentage >= 0) "+" else ""}${String.format(Locale.US, "%.2f", state.stock.priceChangePercentage)}%)",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = priceChangeColor
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Statistics
-                    GlassCard {
-                        Text(
-                            text = "Market Data",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        StatItem("Open Price", formatCurrency(state.stock.openPrice))
-                        Spacer(modifier = Modifier.height(12.dp))
-                        HorizontalDivider(color = Color.White.copy(alpha = 0.2f))
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        StatItem("Previous Close", formatCurrency(state.stock.previousClose))
-                        Spacer(modifier = Modifier.height(12.dp))
-                        HorizontalDivider(color = Color.White.copy(alpha = 0.2f))
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        StatItem("Day High", formatCurrency(state.stock.highPrice))
-                        Spacer(modifier = Modifier.height(12.dp))
-                        HorizontalDivider(color = Color.White.copy(alpha = 0.2f))
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        StatItem("Day Low", formatCurrency(state.stock.lowPrice))
-
-                        state.stock.marketCap?.let { marketCap ->
-                            Spacer(modifier = Modifier.height(12.dp))
-                            HorizontalDivider(color = Color.White.copy(alpha = 0.2f))
-                            Spacer(modifier = Modifier.height(12.dp))
-                            StatItem("Market Cap", formatLargeNumber(marketCap))
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Record Transaction
-                    GlassCard {
-                        Text(
-                            text = "Track Investment",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.White
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                .fillMaxSize()
+                                .verticalScroll(scrollState)
+                                .padding(16.dp)
                         ) {
-                            Button(
-                                onClick = { showTransactionDialog = true },
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                Text("Record Transaction")
+                            // Price Header
+                            GlassCard {
+                                Text(
+                                    text = state.stock.name,
+                                    style = MaterialTheme.typography.titleLarge,
+                                    color = Color.White.copy(alpha = 0.7f)
+                                )
+
+                                Spacer(modifier = Modifier.height(16.dp))
+
+                                Text(
+                                    text = formatCurrency(state.stock.currentPrice),
+                                    style = MaterialTheme.typography.displaySmall,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 36.sp,
+                                    color = Color.White
+                                )
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                val priceChangeColor = if (state.stock.priceChange >= 0) PositiveGreen else NegativeRed
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        text = "${if (state.stock.priceChange >= 0) "+" else ""}${formatCurrency(state.stock.priceChange)}",
+                                        style = MaterialTheme.typography.titleLarge,
+                                        color = priceChangeColor,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        text = "(${if (state.stock.priceChangePercentage >= 0) "+" else ""}${String.format(Locale.US, "%.2f", state.stock.priceChangePercentage)}%)",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = priceChangeColor
+                                    )
+                                }
                             }
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            // Statistics
+                            GlassCard {
+                                Text(
+                                    text = "Market Data",
+                                    style = MaterialTheme.typography.titleLarge,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
+
+                                Spacer(modifier = Modifier.height(16.dp))
+
+                                StatItem("Open Price", formatCurrency(state.stock.openPrice))
+                                Spacer(modifier = Modifier.height(12.dp))
+                                HorizontalDivider(color = Color.White.copy(alpha = 0.2f))
+                                Spacer(modifier = Modifier.height(12.dp))
+
+                                StatItem("Previous Close", formatCurrency(state.stock.previousClose))
+                                Spacer(modifier = Modifier.height(12.dp))
+                                HorizontalDivider(color = Color.White.copy(alpha = 0.2f))
+                                Spacer(modifier = Modifier.height(12.dp))
+
+                                StatItem("Day High", formatCurrency(state.stock.highPrice))
+                                Spacer(modifier = Modifier.height(12.dp))
+                                HorizontalDivider(color = Color.White.copy(alpha = 0.2f))
+                                Spacer(modifier = Modifier.height(12.dp))
+
+                                StatItem("Day Low", formatCurrency(state.stock.lowPrice))
+
+                                state.stock.marketCap?.let { marketCap ->
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                    HorizontalDivider(color = Color.White.copy(alpha = 0.2f))
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                    StatItem("Market Cap", formatLargeNumber(marketCap))
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            // Record Transaction
+                            GlassCard {
+                                Text(
+                                    text = "Track Investment",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.White
+                                )
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    Button(
+                                        onClick = { showTransactionDialog = true },
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        Text("Record Transaction")
+                                    }
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(80.dp))
                         }
                     }
-
-                    Spacer(modifier = Modifier.height(80.dp))
+                    1 -> {
+                        // Chat Tab
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp)
+                        ) {
+                            com.example.moneytwork.presentation.chat.ChatSection(
+                                assetId = state.stock.symbol,
+                                assetName = state.stock.name,
+                                onSignInRequired = {
+                                    navController.navigate("sign_in")
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
 
-    // Transaction Dialog
-    if (showTransactionDialog && state.stock != null) {
-        com.example.moneytwork.presentation.components.AddTransactionDialog(
-            assetId = state.stock.symbol,
-            assetName = state.stock.name,
-            assetSymbol = state.stock.symbol,
-            assetType = com.example.moneytwork.domain.model.AssetType.STOCK,
-            currentPrice = state.stock.currentPrice,
-            onDismiss = { showTransactionDialog = false },
-            onConfirm = { transaction ->
-                viewModel.addTransaction(transaction)
-                showTransactionDialog = false
-            }
-        )
-    }
+        // Transaction Dialog
+        if (showTransactionDialog && state.stock != null) {
+            com.example.moneytwork.presentation.components.AddTransactionDialog(
+                assetId = state.stock.symbol,
+                assetName = state.stock.name,
+                assetSymbol = state.stock.symbol,
+                assetType = com.example.moneytwork.domain.model.AssetType.STOCK,
+                currentPrice = state.stock.currentPrice,
+                onDismiss = { showTransactionDialog = false },
+                onConfirm = { transaction ->
+                    viewModel.addTransaction(transaction)
+                    showTransactionDialog = false
+                }
+            )
+        }
 
 
         if (state.isLoading) {
@@ -216,6 +239,7 @@ fun StockDetailScreen(
                 modifier = Modifier.align(Alignment.Center)
             )
         }
+    }
     }
 }
 

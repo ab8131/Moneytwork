@@ -1,13 +1,19 @@
 package com.example.moneytwork.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.moneytwork.core.constants.Constants
+import com.example.moneytwork.presentation.auth.AuthViewModel
+import com.example.moneytwork.presentation.auth.SignInScreen
+import com.example.moneytwork.presentation.auth.SignUpScreen
 import com.example.moneytwork.presentation.community.CommunityScreen
 import com.example.moneytwork.presentation.market.detail.DetailScreen
 import com.example.moneytwork.presentation.market.list.MarketListScreen
@@ -21,11 +27,23 @@ fun NavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    val authViewModel: AuthViewModel = hiltViewModel()
+    val isSignedIn by authViewModel.isUserSignedIn.collectAsState()
+
     NavHost(
         navController = navController,
-        startDestination = BottomNavItem.Portfolio.route,
+        startDestination = if (isSignedIn) BottomNavItem.Portfolio.route else "sign_in",
         modifier = modifier
     ) {
+        // Auth Screens
+        composable("sign_in") {
+            SignInScreen(navController = navController)
+        }
+
+        composable("sign_up") {
+            SignUpScreen(navController = navController)
+        }
+
         // Bottom Nav Screens
         composable(BottomNavItem.Portfolio.route) {
             PortfolioScreen(navController = navController)
