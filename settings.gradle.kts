@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Moneytwork"
+rootProject.name = "ECO"
 include(":app")
  
