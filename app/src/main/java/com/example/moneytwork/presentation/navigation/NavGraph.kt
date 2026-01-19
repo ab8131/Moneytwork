@@ -1,6 +1,7 @@
 package com.example.moneytwork.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -14,11 +15,13 @@ import com.example.moneytwork.core.constants.Constants
 import com.example.moneytwork.presentation.auth.AuthViewModel
 import com.example.moneytwork.presentation.auth.SignInScreen
 import com.example.moneytwork.presentation.auth.SignUpScreen
-import com.example.moneytwork.presentation.community.CommunityScreen
 import com.example.moneytwork.presentation.market.detail.DetailScreen
 import com.example.moneytwork.presentation.market.list.MarketListScreen
 import com.example.moneytwork.presentation.portfolio.PortfolioScreen
+import com.example.moneytwork.presentation.profile.ProfileScreen
 import com.example.moneytwork.presentation.search.SearchScreen
+import com.example.moneytwork.presentation.settings.LanguageScreen
+import com.example.moneytwork.presentation.settings.SettingsScreen
 import com.example.moneytwork.presentation.stocks.StockListScreen
 import com.example.moneytwork.presentation.stocks.detail.StockDetailScreen
 
@@ -30,9 +33,22 @@ fun NavGraph(
     val authViewModel: AuthViewModel = hiltViewModel()
     val isSignedIn by authViewModel.isUserSignedIn.collectAsState()
 
+    // Handle auth state changes - navigate to appropriate screen
+    LaunchedEffect(isSignedIn) {
+        if (isSignedIn) {
+            navController.navigate(BottomNavItem.Portfolio.route) {
+                popUpTo(0) { inclusive = true }
+            }
+        } else {
+            navController.navigate("sign_in") {
+                popUpTo(0) { inclusive = true }
+            }
+        }
+    }
+
     NavHost(
         navController = navController,
-        startDestination = if (isSignedIn) BottomNavItem.Portfolio.route else "sign_in",
+        startDestination = "sign_in",
         modifier = modifier
     ) {
         // Auth Screens
@@ -57,8 +73,17 @@ fun NavGraph(
             StockListScreen(navController = navController)
         }
 
-        composable(BottomNavItem.Community.route) {
-            CommunityScreen()
+        composable(BottomNavItem.Settings.route) {
+            SettingsScreen(navController = navController)
+        }
+
+        // Settings sub-screens
+        composable("profile") {
+            ProfileScreen(navController = navController)
+        }
+
+        composable("language") {
+            LanguageScreen(navController = navController)
         }
 
         // Detail Screens

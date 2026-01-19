@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+    <h3>3.1 Market Data Tracking</h3>
+    <p>Real-time price tracking for over 50 cryptocurrencies and major US stocks. Each asset displays current price, 24-hour change, and percentage change. Search functionality enables quick asset discovery. Data is cached locally using Room database for offline access. Price charts available with multiple timeframes (1 day, 1 week, 1 month, 3 months, 1 year).</p>
+
+    <h3>3.2 Portfolio Management</h3>
+    <p>Users record buy and sell transactions for any tracked asset. Transaction recording supports dual input: users enter either quantity or total amount, with automatic calculation of the complementary value. Portfolio calculates real-time profit/loss based on current market prices. Holdings tracked per asset with average cost basis calculation. Portfolio overview displays total investment, current value, and overall return percentage.</p>
+
+    <h3>3.3 Authentication System</h3>
+    <p>Firebase Authentication handles user management via email and password. Registration requires username, email, and password (minimum 6 characters). User profiles stored in Firestore with username, email, and creation timestamp. Session persistence maintains login state across app restarts. Profile screen displays user information with logout capability.</p>
+
+    <h3>3.4 Real-time Chat</h3>
+    <p>Each cryptocurrency and stock has a dedicated chat room. Messages synchronized in real-time using Firestore snapshot listeners. Messages display sender username and timestamp. System maintains last 100 messages per chat room. Non-authenticated users have read-only access; authenticated users can send messages.</p>
+
+    <h2>4. Database Design</h2>
+
+    <h3>4.1 Local Database (Room)</h3>
+    <table>
+        <tr><th>Entity</th><th>Purpose</th><th>Key Fields</th></tr>
+        <tr><td>CoinEntity</td><td>Cryptocurrency cache</td><td>id, name, symbol, currentPrice, priceChange, marketCapRank</td></tr>
+        <tr><td>StockEntity</td><td>Stock data cache</td><td>symbol, name, currentPrice, priceChange, marketCap</td></tr>
+        <tr><td>TransactionEntity</td><td>User transactions</td><td>id, assetId, assetType, quantity, price, type, timestamp</td></tr>
+        <tr><td>WatchlistEntity</td><td>Favorite assets</td><td>id, assetId, assetType, addedAt</td></tr>
+    </table>
+
+    <h3>4.2 Remote Database (Firestore)</h3>
+    <table>
+        <tr><th>Collection</th><th>Purpose</th><th>Structure</th></tr>
+        <tr><td>users</td><td>User profiles</td><td>uid, username, email, createdAt</td></tr>
+        <tr><td>chats/{assetId}/messages</td><td>Chat messages</td><td>userId, username, message, timestamp, assetId</td></tr>
+    </table>
+
+    <h3>4.3 Data Synchronization</h3>
+    <p>Offline-first strategy: API requests cache data to Room before display. On failure, application falls back to cached data. Chat messages use Firestore real-time listeners for immediate cross-device synchronization.</p>
+
+    <h2>5. Implementation Details</h2>
+
+    <h3>5.1 Transaction Calculations</h3>
+    <p>Portfolio calculations: Average cost basis = total spent ÷ total quantity. Current value = quantity × current price. Profit/loss = current value - total invested. Percentage return = ((current - invested) ÷ invested) × 100. Each transaction stored with original price, quantity, timestamp.</p>
+
+    <h3>5.2 Real-time Synchronization</h3>
+    <p>Chat uses Firestore addSnapshotListener for real-time updates. Messages written to Firestore propagate to all connected clients within seconds. Messages ordered by timestamp. Automatic reconnection on network restoration. Limited to 100 most recent messages per room.</p>
+
+    <h3>5.3 Error Handling</h3>
+    <p>Network errors trigger fallback to cached data. API rate limits display user-friendly messages. Authentication errors provide specific feedback. All errors logged for debugging. UI gracefully degrades when features unavailable.</p>
+
+    <h2>6. Application Structure</h2>
+
+    <h3>6.1 Navigation</h3>
+    <p>Bottom tab navigation with four sections: Portfolio, Cryptocurrency List, Stock List, Profile. Detail screens contain tabs for charts, financial data, ownership, and chat. Authentication screens presented when no user logged in.</p>
+
+    <h3>6.2 User Interface</h3>
+    <p>Built with Jetpack Compose using dark theme. Glassmorphism design with semi-transparent elements. Poppins font family. Consistent design patterns across all screens. Responsive layouts adapting to screen sizes.</p>
+
+    <h2>7. Security</h2>
+
+    <h3>7.1 Authentication</h3>
+    <p>Firebase Authentication provides industry-standard security. Password minimum 6 characters. Email validation before registration. Session tokens managed by Firebase SDK. Passwords never stored locally.</p>
+
+    <h3>7.2 Data Security</h3>
+    <p>Firestore security rules enforce access control. User profiles modifiable only by owner. Chat messages readable by all, writable only by authenticated users. Users can delete only their own messages. Transactions stored exclusively on local device.</p>
+
+    <h2>8. Testing</h2>
+
+    <h3>8.1 Completed Testing</h3>
+    <p>Manual testing performed for authentication, asset browsing, transaction recording, portfolio calculation, real-time chat, offline functionality, navigation, error scenarios.</p>
+
+    <h3>8.2 Pending Testing</h3>
+    <p>Automated testing to be implemented: unit tests for repositories and ViewModels, UI tests for critical flows, integration tests for API layer.</p>
+
+    <h2>9. Requirements Compliance</h2>
+
+    <table>
+        <tr><th>Requirement</th><th>Status</th><th>Implementation</th></tr>
+        <tr><td>Local Database</td><td>Complete</td><td>Room with 4 entities</td></tr>
+        <tr><td>Remote Database</td><td>Complete</td><td>Firebase Firestore</td></tr>
+        <tr><td>API Consumption</td><td>Complete</td><td>CoinGecko, Finnhub APIs</td></tr>
+        <tr><td>Offline Functionality</td><td>Complete</td><td>Cache-first strategy</td></tr>
+        <tr><td>Unit Tests</td><td>Pending</td><td>To be implemented</td></tr>
+        <tr><td>UI Tests</td><td>Pending</td><td>To be implemented</td></tr>
+        <tr><td>Multi-language</td><td>Pending</td><td>3+ languages to be added</td></tr>
+    </table>
+
+    <h2>10. Technical Challenges</h2>
+
+    <h3>10.1 Real-time Calculations</h3>
+    <p>Challenge: Portfolio value calculation with fluctuating prices. Solution: Kotlin Flow-based reactive architecture with automatic recalculation on price updates.</p>
+
+    <h3>10.2 API Rate Limiting</h3>
+    <p>Challenge: Free tier API rate limits. Solution: Aggressive caching with 60-second timeout, graceful degradation to cached data.</p>
+
+    <h3>10.3 Complex Navigation</h3>
+    <p>Challenge: State management across navigation layers. Solution: Jetpack Navigation Compose with proper back stack and state preservation.</p>
+
+    <h3>10.4 Dual Input Mode</h3>
+    <p>Challenge: Quantity or amount input with conversion. Solution: Bidirectional calculation system updating both fields reactively based on current price.</p>
+
+    <h2>11. Project Statistics</h2>
+    <ul>
+        <li>Total screens: 10 (8 main + 2 authentication)</li>
+        <li>Database entities: 4 local (Room) + 2 remote (Firestore)</li>
+        <li>API integrations: 4 services</li>
+        <li>Lines of code: ~5,000 Kotlin</li>
+        <li>Supported assets: 50+ cryptocurrencies, major US stocks</li>
+    </ul>
+
+    <h2>12. Future Enhancements</h2>
+    <ul>
+        <li>Internationalization (French, English, additional languages)</li>
+        <li>Comprehensive test coverage</li>
+        <li>Push notifications for price alerts and messages</li>
+        <li>Advanced charting with technical indicators</li>
+        <li>Transaction export (CSV/PDF)</li>
+        <li>User avatar upload</li>
+        <li>Message reactions</li>
+        <li>News integration</li>
+    </ul>
+
+    <h2>13. Conclusion</h2>
+    <p>Moneytwork successfully demonstrates the implementation of a production-ready mobile application incorporating modern Android development practices: Jetpack Compose for UI, Clean Architecture with MVVM pattern, multi-source data management (local database, remote database, and external APIs), real-time Firebase communication, secure authentication, and offline-first architecture. The application fully satisfies all core requirements including local database implementation, remote database integration, API consumption from multiple sources, and comprehensive offline functionality. The modular architecture ensures long-term maintainability and scalability for future enhancements.</p>
+
+    <div class="center" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #000;">
+        <p><strong>Moneytwork Project Report</strong></p>
+        <p>Ahmad Habib and Alexandre Bourges</p>
+        <p>January 18, 2026</p>
+    </div>
+</body>
+</html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Moneytwork - Project Report</title>
+    <style>
+        body {
+            font-family: Times New Roman, serif;
+            line-height: 1.6;
+            color: #000;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        h1 { font-size: 18pt; text-align: center; margin-bottom: 5px; }
+        h2 { font-size: 14pt; margin-top: 25px; margin-bottom: 10px; border-bottom: 1px solid #000; }
+        h3 { font-size: 12pt; margin-top: 15px; margin-bottom: 8px; }
+        p, li { font-size: 11pt; text-align: justify; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 10pt; }
+        th, td { border: 1px solid #000; padding: 6px; text-align: left; }
+        th { background: #f0f0f0; }
+        .center { text-align: center; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Moneytwork</h1>
+        <p><strong>Mobile Application for Financial Tracking and Social Networking</strong></p>
+        <p>Project Report - January 2026</p>
+        <p><strong>Authors:</strong> Ahmad Habib, Alexandre Bourges</p>
+    </div>
+
+    <h2>1. Executive Summary</h2>
+    <p>Moneytwork is a mobile application combining financial market tracking with social networking. Users monitor cryptocurrency and stock prices in real-time, record investment transactions, calculate portfolio performance, and engage with other investors through asset-specific chat groups. Built with Kotlin and Jetpack Compose for Android, the application implements modern architecture patterns and integrates multiple external APIs and database systems.</p>
+
+    <h2>2. Technical Architecture</h2>
+
+    <h3>2.1 Technology Stack</h3>
+    <table>
+        <tr><th>Component</th><th>Technology</th></tr>
+        <tr><td>Programming Language</td><td>Kotlin</td></tr>
+        <tr><td>UI Framework</td><td>Jetpack Compose</td></tr>
+        <tr><td>Architecture Pattern</td><td>MVVM + Clean Architecture</td></tr>
+        <tr><td>Dependency Injection</td><td>Hilt</td></tr>
+        <tr><td>Local Database</td><td>Room (SQLite)</td></tr>
+        <tr><td>Remote Database</td><td>Firebase Firestore</td></tr>
+        <tr><td>Authentication</td><td>Firebase Authentication</td></tr>
+        <tr><td>HTTP Client</td><td>Retrofit + OkHttp</td></tr>
+        <tr><td>Charts Library</td><td>Vico</td></tr>
+    </table>
+
+    <h3>2.2 Architecture Layers</h3>
+    <p>The application follows Clean Architecture principles with three distinct layers:</p>
+    <ul>
+        <li><strong>Presentation Layer:</strong> UI components (Jetpack Compose), ViewModels for state management, navigation logic.</li>
+        <li><strong>Domain Layer:</strong> Business logic through use cases, repository interfaces, domain models.</li>
+        <li><strong>Data Layer:</strong> Repository implementations, data sources (Room, APIs, Firebase), data transformation.</li>
+    </ul>
+
+    <h3>2.3 API Integrations</h3>
+    <table>
+        <tr><th>API</th><th>Purpose</th><th>Usage</th></tr>
+        <tr><td>CoinGecko</td><td>Cryptocurrency data</td><td>Real-time prices, historical data, market information</td></tr>
+        <tr><td>Finnhub</td><td>Stock market data</td><td>Real-time quotes, company profiles, market statistics</td></tr>
+        <tr><td>Firebase Auth</td><td>User authentication</td><td>Email/password authentication, session management</td></tr>
+        <tr><td>Firebase Firestore</td><td>Real-time database</td><td>User profiles, chat messages, real-time synchronization</td></tr>
+    </table>
+
+    <h2>3. Core Features</h2>
+<!DOCTYPE html>
+    <h3>3.1 Market Data Tracking</h3>
+    <p>Real-time price tracking for over 50 cryptocurrencies and major US stocks. Each asset displays current price, 24-hour change, and percentage change. Search functionality enables quick asset discovery. Data is cached locally using Room database for offline access. Price charts available with multiple timeframes (1 day, 1 week, 1 month, 3 months, 1 year).</p>
+
+    <h3>3.2 Portfolio Management</h3>
+    <p>Users record buy and sell transactions for any tracked asset. Transaction recording supports dual input: users enter either quantity or total amount, with automatic calculation of the complementary value. Portfolio calculates real-time profit/loss based on current market prices. Holdings tracked per asset with average cost basis calculation. Portfolio overview displays total investment, current value, and overall return percentage.</p>
+
+    <h3>3.3 Authentication System</h3>
+    <p>Firebase Authentication handles user management via email and password. Registration requires username, email, and password (minimum 6 characters). User profiles stored in Firestore with username, email, and creation timestamp. Session persistence maintains login state across app restarts. Profile screen displays user information with logout capability.</p>
+
+    <h3>3.4 Real-time Chat</h3>
+    <p>Each cryptocurrency and stock has a dedicated chat room. Messages synchronized in real-time using Firestore snapshot listeners. Messages display sender username and timestamp. System maintains last 100 messages per chat room. Non-authenticated users have read-only access; authenticated users can send messages.</p>
+
+    <h2>4. Database Design</h2>
+
+    <h3>4.1 Local Database (Room)</h3>
+    <table>
+        <tr><th>Entity</th><th>Purpose</th><th>Key Fields</th></tr>
+        <tr><td>CoinEntity</td><td>Cryptocurrency cache</td><td>id, name, symbol, currentPrice, priceChange, marketCapRank</td></tr>
+        <tr><td>StockEntity</td><td>Stock data cache</td><td>symbol, name, currentPrice, priceChange, marketCap</td></tr>
+        <tr><td>TransactionEntity</td><td>User transactions</td><td>id, assetId, assetType, quantity, price, type, timestamp</td></tr>
+        <tr><td>WatchlistEntity</td><td>Favorite assets</td><td>id, assetId, assetType, addedAt</td></tr>
+    </table>
+
+    <h3>4.2 Remote Database (Firestore)</h3>
+    <table>
+        <tr><th>Collection</th><th>Purpose</th><th>Structure</th></tr>
+        <tr><td>users</td><td>User profiles</td><td>uid, username, email, createdAt</td></tr>
+        <tr><td>chats/{assetId}/messages</td><td>Chat messages</td><td>userId, username, message, timestamp, assetId</td></tr>
+    </table>
+
+    <h3>4.3 Data Synchronization</h3>
+    <p>Offline-first strategy: API requests cache data to Room before display. On failure, application falls back to cached data. Chat messages use Firestore real-time listeners for immediate cross-device synchronization.</p>
+
+    <h2>5. Implementation Details</h2>
+
+    <h3>5.1 Transaction Calculations</h3>
+    <p>Portfolio calculations: Average cost basis = total spent ÷ total quantity. Current value = quantity × current price. Profit/loss = current value - total invested. Percentage return = ((current - invested) ÷ invested) × 100. Each transaction stored with original price, quantity, timestamp.</p>
+
+    <h3>5.2 Real-time Synchronization</h3>
+    <p>Chat uses Firestore addSnapshotListener for real-time updates. Messages written to Firestore propagate to all connected clients within seconds. Messages ordered by timestamp. Automatic reconnection on network restoration. Limited to 100 most recent messages per room.</p>
+
+    <h3>5.3 Error Handling</h3>
+    <p>Network errors trigger fallback to cached data. API rate limits display user-friendly messages. Authentication errors provide specific feedback. All errors logged for debugging. UI gracefully degrades when features unavailable.</p>
+
+    <h2>6. Application Structure</h2>
+
+    <h3>6.1 Navigation</h3>
+    <p>Bottom tab navigation with four sections: Portfolio, Cryptocurrency List, Stock List, Profile. Detail screens contain tabs for charts, financial data, ownership, and chat. Authentication screens presented when no user logged in.</p>
+
+    <h3>6.2 User Interface</h3>
+    <p>Built with Jetpack Compose using dark theme. Glassmorphism design with semi-transparent elements. Poppins font family. Consistent design patterns across all screens. Responsive layouts adapting to screen sizes.</p>
+
+    <h2>7. Security</h2>
+
+    <h3>7.1 Authentication</h3>
+    <p>Firebase Authentication provides industry-standard security. Password minimum 6 characters. Email validation before registration. Session tokens managed by Firebase SDK. Passwords never stored locally.</p>
+
+    <h3>7.2 Data Security</h3>
+    <p>Firestore security rules enforce access control. User profiles modifiable only by owner. Chat messages readable by all, writable only by authenticated users. Users can delete only their own messages. Transactions stored exclusively on local device.</p>
+
+    <h2>8. Testing</h2>
+
+    <h3>8.1 Completed Testing</h3>
+    <p>Manual testing performed for authentication, asset browsing, transaction recording, portfolio calculation, real-time chat, offline functionality, navigation, error scenarios.</p>
+
+    <h3>8.2 Pending Testing</h3>
+    <p>Automated testing to be implemented: unit tests for repositories and ViewModels, UI tests for critical flows, integration tests for API layer.</p>
+
+    <h2>9. Requirements Compliance</h2>
+
+    <table>
+        <tr><th>Requirement</th><th>Status</th><th>Implementation</th></tr>
+        <tr><td>Local Database</td><td>Complete</td><td>Room with 4 entities</td></tr>
+        <tr><td>Remote Database</td><td>Complete</td><td>Firebase Firestore</td></tr>
+        <tr><td>API Consumption</td><td>Complete</td><td>CoinGecko, Finnhub APIs</td></tr>
+        <tr><td>Offline Functionality</td><td>Complete</td><td>Cache-first strategy</td></tr>
+        <tr><td>Unit Tests</td><td>Pending</td><td>To be implemented</td></tr>
+        <tr><td>UI Tests</td><td>Pending</td><td>To be implemented</td></tr>
+        <tr><td>Multi-language</td><td>Pending</td><td>3+ languages to be added</td></tr>
+    </table>
+
+    <h2>10. Technical Challenges</h2>
+
+    <h3>10.1 Real-time Calculations</h3>
+    <p>Challenge: Portfolio value calculation with fluctuating prices. Solution: Kotlin Flow-based reactive architecture with automatic recalculation on price updates.</p>
+
+    <h3>10.2 API Rate Limiting</h3>
+    <p>Challenge: Free tier API rate limits. Solution: Aggressive caching with 60-second timeout, graceful degradation to cached data.</p>
+
+    <h3>10.3 Complex Navigation</h3>
+    <p>Challenge: State management across navigation layers. Solution: Jetpack Navigation Compose with proper back stack and state preservation.</p>
+
+    <h3>10.4 Dual Input Mode</h3>
+    <p>Challenge: Quantity or amount input with conversion. Solution: Bidirectional calculation system updating both fields reactively based on current price.</p>
+
+    <h2>11. Project Statistics</h2>
+    <ul>
+        <li>Total screens: 10 (8 main + 2 authentication)</li>
+        <li>Database entities: 4 local (Room) + 2 remote (Firestore)</li>
+        <li>API integrations: 4 services</li>
+        <li>Lines of code: ~5,000 Kotlin</li>
+        <li>Supported assets: 50+ cryptocurrencies, major US stocks</li>
+    </ul>
+
+    <h2>12. Potential Future Enhancements</h2>
+    <ul>
+        <li>Multi-language support for international markets</li>
+        <li>Push notifications for price alerts and chat activity</li>
+        <li>Advanced charting with technical indicators and drawing tools</li>
+        <li>Portfolio export functionality (CSV/PDF formats)</li>
+        <li>Custom user avatars and profile customization</li>
+        <li>Enhanced chat features (reactions, replies, media sharing)</li>
+        <li>Financial news integration for each asset</li>
+        <li>Automated trading signals and alerts</li>
+    </ul>
+
+    <h2>13. Conclusion</h2>
+    <p>Moneytwork demonstrates implementation of a complex mobile application incorporating modern Android development: Jetpack Compose UI, Clean Architecture with MVVM, multi-source data management (local, remote, APIs), real-time Firebase communication, secure authentication, and offline-first architecture. The application meets core requirements for local database, remote database, API consumption, and offline functionality. Modular architecture ensures maintainability and scalability. Future work focuses on test implementation and internationalization.</p>
+
+    <div class="center" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #000;">
+        <p><strong>Moneytwork Project Report</strong></p>
+        <p>Ahmad Habib and Alexandre Bourges</p>
+        <p>January 18, 2026</p>
+    </div>
+</body>
+</html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Moneytwork - Project Report</title>
+    <style>
+        body {
+            font-family: Times New Roman, serif;
+            line-height: 1.6;
+            color: #000;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        h1 { font-size: 18pt; text-align: center; margin-bottom: 5px; }
+        h2 { font-size: 14pt; margin-top: 25px; margin-bottom: 10px; border-bottom: 1px solid #000; }
+        h3 { font-size: 12pt; margin-top: 15px; margin-bottom: 8px; }
+        p, li { font-size: 11pt; text-align: justify; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 10pt; }
+        th, td { border: 1px solid #000; padding: 6px; text-align: left; }
+        th { background: #f0f0f0; }
+        .center { text-align: center; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Moneytwork</h1>
+        <p><strong>Mobile Application for Financial Tracking and Social Networking</strong></p>
+        <p>Project Report - January 2026</p>
+        <p><strong>Authors:</strong> Ahmad Habib, Alexandre Bourges</p>
+    </div>
+
+    <h2>1. Executive Summary</h2>
+    <p>Moneytwork is a mobile application combining financial market tracking with social networking. Users monitor cryptocurrency and stock prices in real-time, record investment transactions, calculate portfolio performance, and engage with other investors through asset-specific chat groups. Built with Kotlin and Jetpack Compose for Android, the application implements modern architecture patterns and integrates multiple external APIs and database systems.</p>
+
+    <h2>2. Technical Architecture</h2>
+
+    <h3>2.1 Technology Stack</h3>
+    <table>
+        <tr><th>Component</th><th>Technology</th></tr>
+        <tr><td>Programming Language</td><td>Kotlin</td></tr>
+        <tr><td>UI Framework</td><td>Jetpack Compose</td></tr>
+        <tr><td>Architecture Pattern</td><td>MVVM + Clean Architecture</td></tr>
+        <tr><td>Dependency Injection</td><td>Hilt</td></tr>
+        <tr><td>Local Database</td><td>Room (SQLite)</td></tr>
+        <tr><td>Remote Database</td><td>Firebase Firestore</td></tr>
+        <tr><td>Authentication</td><td>Firebase Authentication</td></tr>
+        <tr><td>HTTP Client</td><td>Retrofit + OkHttp</td></tr>
+        <tr><td>Charts Library</td><td>Vico</td></tr>
+    </table>
+
+    <h3>2.2 Architecture Layers</h3>
+    <p>The application follows Clean Architecture principles with three distinct layers:</p>
+    <ul>
+        <li><strong>Presentation Layer:</strong> UI components (Jetpack Compose), ViewModels for state management, navigation logic.</li>
+        <li><strong>Domain Layer:</strong> Business logic through use cases, repository interfaces, domain models.</li>
+        <li><strong>Data Layer:</strong> Repository implementations, data sources (Room, APIs, Firebase), data transformation.</li>
+    </ul>
+
+    <h3>2.3 API Integrations</h3>
+    <table>
+        <tr><th>API</th><th>Purpose</th><th>Usage</th></tr>
+        <tr><td>CoinGecko</td><td>Cryptocurrency data</td><td>Real-time prices, historical data, market information</td></tr>
+        <tr><td>Finnhub</td><td>Stock market data</td><td>Real-time quotes, company profiles, market statistics</td></tr>
+        <tr><td>Firebase Auth</td><td>User authentication</td><td>Email/password authentication, session management</td></tr>
+        <tr><td>Firebase Firestore</td><td>Real-time database</td><td>User profiles, chat messages, real-time synchronization</td></tr>
+    </table>
+
+    <h2>3. Core Features</h2>
+<!DOCTYPE html>
+    <h3>3.1 Market Data Tracking</h3>
+    <p>Real-time price tracking for over 50 cryptocurrencies and major US stocks. Each asset displays current price, 24-hour change, and percentage change. Search functionality enables quick asset discovery. Data is cached locally using Room database for offline access. Price charts available with multiple timeframes (1 day, 1 week, 1 month, 3 months, 1 year).</p>
+
+    <h3>3.2 Portfolio Management</h3>
+    <p>Users record buy and sell transactions for any tracked asset. Transaction recording supports dual input: users enter either quantity or total amount, with automatic calculation of the complementary value. Portfolio calculates real-time profit/loss based on current market prices. Holdings tracked per asset with average cost basis calculation. Portfolio overview displays total investment, current value, and overall return percentage.</p>
+
+    <h3>3.3 Authentication System</h3>
+    <p>Firebase Authentication handles user management via email and password. Registration requires username, email, and password (minimum 6 characters). User profiles stored in Firestore with username, email, and creation timestamp. Session persistence maintains login state across app restarts. Profile screen displays user information with logout capability.</p>
+
+    <h3>3.4 Real-time Chat</h3>
+    <p>Each cryptocurrency and stock has a dedicated chat room. Messages synchronized in real-time using Firestore snapshot listeners. Messages display sender username and timestamp. System maintains last 100 messages per chat room. Non-authenticated users have read-only access; authenticated users can send messages.</p>
+
+    <h2>4. Database Design</h2>
+
+    <h3>4.1 Local Database (Room)</h3>
+    <table>
+        <tr><th>Entity</th><th>Purpose</th><th>Key Fields</th></tr>
+        <tr><td>CoinEntity</td><td>Cryptocurrency cache</td><td>id, name, symbol, currentPrice, priceChange, marketCapRank</td></tr>
+        <tr><td>StockEntity</td><td>Stock data cache</td><td>symbol, name, currentPrice, priceChange, marketCap</td></tr>
+        <tr><td>TransactionEntity</td><td>User transactions</td><td>id, assetId, assetType, quantity, price, type, timestamp</td></tr>
+        <tr><td>WatchlistEntity</td><td>Favorite assets</td><td>id, assetId, assetType, addedAt</td></tr>
+    </table>
+
+    <h3>4.2 Remote Database (Firestore)</h3>
+    <table>
+        <tr><th>Collection</th><th>Purpose</th><th>Structure</th></tr>
+        <tr><td>users</td><td>User profiles</td><td>uid, username, email, createdAt</td></tr>
+        <tr><td>chats/{assetId}/messages</td><td>Chat messages</td><td>userId, username, message, timestamp, assetId</td></tr>
+    </table>
+
+    <h3>4.3 Data Synchronization</h3>
+    <p>Offline-first strategy: API requests cache data to Room before display. On failure, application falls back to cached data. Chat messages use Firestore real-time listeners for immediate cross-device synchronization.</p>
+
+    <h2>5. Implementation Details</h2>
+
+    <h3>5.1 Transaction Calculations</h3>
+    <p>Portfolio calculations: Average cost basis = total spent ÷ total quantity. Current value = quantity × current price. Profit/loss = current value - total invested. Percentage return = ((current - invested) ÷ invested) × 100. Each transaction stored with original price, quantity, timestamp.</p>
+
+    <h3>5.2 Real-time Synchronization</h3>
+    <p>Chat uses Firestore addSnapshotListener for real-time updates. Messages written to Firestore propagate to all connected clients within seconds. Messages ordered by timestamp. Automatic reconnection on network restoration. Limited to 100 most recent messages per room.</p>
+
+    <h3>5.3 Error Handling</h3>
+    <p>Network errors trigger fallback to cached data. API rate limits display user-friendly messages. Authentication errors provide specific feedback. All errors logged for debugging. UI gracefully degrades when features unavailable.</p>
+
+    <h2>6. Application Structure</h2>
+
+    <h3>6.1 Navigation</h3>
+    <p>Bottom tab navigation with four sections: Portfolio, Cryptocurrency List, Stock List, Profile. Detail screens contain tabs for charts, financial data, ownership, and chat. Authentication screens presented when no user logged in.</p>
+
+    <h3>6.2 User Interface</h3>
+    <p>Built with Jetpack Compose using dark theme. Glassmorphism design with semi-transparent elements. Poppins font family. Consistent design patterns across all screens. Responsive layouts adapting to screen sizes.</p>
+
+    <h2>7. Security</h2>
+
+    <h3>7.1 Authentication</h3>
+    <p>Firebase Authentication provides industry-standard security. Password minimum 6 characters. Email validation before registration. Session tokens managed by Firebase SDK. Passwords never stored locally.</p>
+
+    <h3>7.2 Data Security</h3>
+    <p>Firestore security rules enforce access control. User profiles modifiable only by owner. Chat messages readable by all, writable only by authenticated users. Users can delete only their own messages. Transactions stored exclusively on local device.</p>
+
+    <h2>8. Testing</h2>
+
+    <h3>8.1 Completed Testing</h3>
+    <p>Manual testing performed for authentication, asset browsing, transaction recording, portfolio calculation, real-time chat, offline functionality, navigation, error scenarios.</p>
+
+    <h3>8.2 Pending Testing</h3>
+    <p>Automated testing to be implemented: unit tests for repositories and ViewModels, UI tests for critical flows, integration tests for API layer.</p>
+
+    <h2>9. Requirements Compliance</h2>
+
+    <table>
+        <tr><th>Requirement</th><th>Status</th><th>Implementation</th></tr>
+        <tr><td>Local Database</td><td>Complete</td><td>Room with 4 entities for caching and transactions</td></tr>
+        <tr><td>Remote Database</td><td>Complete</td><td>Firebase Firestore for user profiles and chat</td></tr>
+        <tr><td>API Consumption</td><td>Complete</td><td>CoinGecko and Finnhub APIs integrated</td></tr>
+        <tr><td>Offline Functionality</td><td>Complete</td><td>Cache-first strategy with automatic fallback</td></tr>
+        <tr><td>Testing</td><td>Complete</td><td>Comprehensive manual testing performed</td></tr>
+        <tr><td>Authentication</td><td>Complete</td><td>Firebase Authentication with email/password</td></tr>
+        <tr><td>Real-time Features</td><td>Complete</td><td>Firestore-based real-time chat system</td></tr>
+    </table>
+
+    <h2>10. Technical Challenges</h2>
+
+    <h3>10.1 Real-time Calculations</h3>
+    <p>Challenge: Portfolio value calculation with fluctuating prices. Solution: Kotlin Flow-based reactive architecture with automatic recalculation on price updates.</p>
+
+    <h3>10.2 API Rate Limiting</h3>
+    <p>Challenge: Free tier API rate limits. Solution: Aggressive caching with 60-second timeout, graceful degradation to cached data.</p>
+
+    <h3>10.3 Complex Navigation</h3>
+    <p>Challenge: State management across navigation layers. Solution: Jetpack Navigation Compose with proper back stack and state preservation.</p>
+
+    <h3>10.4 Dual Input Mode</h3>
+    <p>Challenge: Quantity or amount input with conversion. Solution: Bidirectional calculation system updating both fields reactively based on current price.</p>
+
+    <h2>11. Project Statistics</h2>
+    <ul>
+        <li>Total screens: 10 (8 main + 2 authentication)</li>
+        <li>Database entities: 4 local (Room) + 2 remote (Firestore)</li>
+        <li>API integrations: 4 services</li>
+        <li>Lines of code: ~5,000 Kotlin</li>
+        <li>Supported assets: 50+ cryptocurrencies, major US stocks</li>
+    </ul>
+
+    <h2>12. Future Enhancements</h2>
+    <ul>
+        <li>Internationalization (French, English, additional languages)</li>
+        <li>Comprehensive test coverage</li>
+        <li>Push notifications for price alerts and messages</li>
+        <li>Advanced charting with technical indicators</li>
+        <li>Transaction export (CSV/PDF)</li>
+        <li>User avatar upload</li>
+        <li>Message reactions</li>
+        <li>News integration</li>
+    </ul>
+
+    <h2>13. Conclusion</h2>
+    <p>Moneytwork demonstrates implementation of a complex mobile application incorporating modern Android development: Jetpack Compose UI, Clean Architecture with MVVM, multi-source data management (local, remote, APIs), real-time Firebase communication, secure authentication, and offline-first architecture. The application meets core requirements for local database, remote database, API consumption, and offline functionality. Modular architecture ensures maintainability and scalability. Future work focuses on test implementation and internationalization.</p>
+
+    <div class="center" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #000;">
+        <p><strong>Moneytwork Project Report</strong></p>
+        <p>Ahmad Habib and Alexandre Bourges</p>
+        <p>January 18, 2026</p>
+    </div>
+</body>
+</html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Moneytwork - Project Report</title>
+    <style>
+        body {
+            font-family: Times New Roman, serif;
+            line-height: 1.6;
+            color: #000;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        h1 { font-size: 18pt; text-align: center; margin-bottom: 5px; }
+        h2 { font-size: 14pt; margin-top: 25px; margin-bottom: 10px; border-bottom: 1px solid #000; }
+        h3 { font-size: 12pt; margin-top: 15px; margin-bottom: 8px; }
+        p, li { font-size: 11pt; text-align: justify; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 10pt; }
+        th, td { border: 1px solid #000; padding: 6px; text-align: left; }
+        th { background: #f0f0f0; }
+        .center { text-align: center; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Moneytwork</h1>
+        <p><strong>Mobile Application for Financial Tracking and Social Networking</strong></p>
+        <p>Project Report - January 2026</p>
+        <p><strong>Authors:</strong> Ahmad Habib, Alexandre Bourges</p>
+    </div>
+
+    <h2>1. Executive Summary</h2>
+    <p>Moneytwork is a mobile application combining financial market tracking with social networking. Users monitor cryptocurrency and stock prices in real-time, record investment transactions, calculate portfolio performance, and engage with other investors through asset-specific chat groups. Built with Kotlin and Jetpack Compose for Android, the application implements modern architecture patterns and integrates multiple external APIs and database systems.</p>
+
+    <h2>2. Technical Architecture</h2>
+
+    <h3>2.1 Technology Stack</h3>
+    <table>
+        <tr><th>Component</th><th>Technology</th></tr>
+        <tr><td>Programming Language</td><td>Kotlin</td></tr>
+        <tr><td>UI Framework</td><td>Jetpack Compose</td></tr>
+        <tr><td>Architecture Pattern</td><td>MVVM + Clean Architecture</td></tr>
+        <tr><td>Dependency Injection</td><td>Hilt</td></tr>
+        <tr><td>Local Database</td><td>Room (SQLite)</td></tr>
+        <tr><td>Remote Database</td><td>Firebase Firestore</td></tr>
+        <tr><td>Authentication</td><td>Firebase Authentication</td></tr>
+        <tr><td>HTTP Client</td><td>Retrofit + OkHttp</td></tr>
+        <tr><td>Charts Library</td><td>Vico</td></tr>
+    </table>
+
+    <h3>2.2 Architecture Layers</h3>
+    <p>The application follows Clean Architecture principles with three distinct layers:</p>
+    <ul>
+        <li><strong>Presentation Layer:</strong> UI components (Jetpack Compose), ViewModels for state management, navigation logic.</li>
+        <li><strong>Domain Layer:</strong> Business logic through use cases, repository interfaces, domain models.</li>
+        <li><strong>Data Layer:</strong> Repository implementations, data sources (Room, APIs, Firebase), data transformation.</li>
+    </ul>
+
+    <h3>2.3 API Integrations</h3>
+    <table>
+        <tr><th>API</th><th>Purpose</th><th>Usage</th></tr>
+        <tr><td>CoinGecko</td><td>Cryptocurrency data</td><td>Real-time prices, historical data, market information</td></tr>
+        <tr><td>Finnhub</td><td>Stock market data</td><td>Real-time quotes, company profiles, market statistics</td></tr>
+        <tr><td>Firebase Auth</td><td>User authentication</td><td>Email/password authentication, session management</td></tr>
+        <tr><td>Firebase Firestore</td><td>Real-time database</td><td>User profiles, chat messages, real-time synchronization</td></tr>
+    </table>
+
+    <h2>3. Core Features</h2>
+
+    <h3>3.1 Market Data Tracking</h3>
+    <p>Real-time price tracking for over 50 cryptocurrencies and major US stocks. Each asset displays current price, 24-hour change, and percentage change. Search functionality enables quick asset discovery. Data is cached locally using Room database for offline access. Price charts available with multiple timeframes (1 day, 1 week, 1 month, 3 months, 1 year).</p>
+
+    <h3>3.2 Portfolio Management</h3>
+    <p>Users record buy and sell transactions for any tracked asset. Transaction recording supports dual input: users enter either quantity or total amount, with automatic calculation of the complementary value. Portfolio calculates real-time profit/loss based on current market prices. Holdings tracked per asset with average cost basis calculation. Portfolio overview displays total investment, current value, and overall return percentage.</p>
+
+    <h3>3.3 Authentication System</h3>
+    <p>Firebase Authentication handles user management via email and password. Registration requires username, email, and password (minimum 6 characters). User profiles stored in Firestore with username, email, and creation timestamp. Session persistence maintains login state across app restarts. Profile screen displays user information with logout capability.</p>
+
+    <h3>3.4 Real-time Chat</h3>
+    <p>Each cryptocurrency and stock has a dedicated chat room. Messages synchronized in real-time using Firestore snapshot listeners. Messages display sender username and timestamp. System maintains last 100 messages per chat room. Non-authenticated users have read-only access; authenticated users can send messages.</p>
+
+    <h2>4. Database Design</h2>
+
+    <h3>4.1 Local Database (Room)</h3>
+    <table>
+        <tr><th>Entity</th><th>Purpose</th><th>Key Fields</th></tr>
+        <tr><td>CoinEntity</td><td>Cryptocurrency cache</td><td>id, name, symbol, currentPrice, priceChange, marketCapRank</td></tr>
+        <tr><td>StockEntity</td><td>Stock data cache</td><td>symbol, name, currentPrice, priceChange, marketCap</td></tr>
+        <tr><td>TransactionEntity</td><td>User transactions</td><td>id, assetId, assetType, quantity, price, type, timestamp</td></tr>
+        <tr><td>WatchlistEntity</td><td>Favorite assets</td><td>id, assetId, assetType, addedAt</td></tr>
+    </table>
+
+    <h3>4.2 Remote Database (Firestore)</h3>
+    <table>
+        <tr><th>Collection</th><th>Purpose</th><th>Structure</th></tr>
+        <tr><td>users</td><td>User profiles</td><td>uid, username, email, createdAt</td></tr>
+        <tr><td>chats/{assetId}/messages</td><td>Chat messages</td><td>userId, username, message, timestamp, assetId</td></tr>
+    </table>
+
+    <h3>4.3 Data Synchronization</h3>
+    <p>Offline-first strategy: API requests cache data to Room before display. On failure, application falls back to cached data. Chat messages use Firestore real-time listeners for immediate cross-device synchronization.</p>
+
+    <h2>5. Implementation Details</h2>
+
+    <h3>5.1 Transaction Calculations</h3>
+    <p>Portfolio calculations: Average cost basis = total spent ÷ total quantity. Current value = quantity × current price. Profit/loss = current value - total invested. Percentage return = ((current - invested) ÷ invested) × 100. Each transaction stored with original price, quantity, timestamp.</p>
+
+    <h3>5.2 Real-time Synchronization</h3>
+    <p>Chat uses Firestore addSnapshotListener for real-time updates. Messages written to Firestore propagate to all connected clients within seconds. Messages ordered by timestamp. Automatic reconnection on network restoration. Limited to 100 most recent messages per room.</p>
+
+    <h3>5.3 Error Handling</h3>
+    <p>Network errors trigger fallback to cached data. API rate limits display user-friendly messages. Authentication errors provide specific feedback. All errors logged for debugging. UI gracefully degrades when features unavailable.</p>
+
+    <h2>6. Application Structure</h2>
+
+    <h3>6.1 Navigation</h3>
+    <p>Bottom tab navigation with four sections: Portfolio, Cryptocurrency List, Stock List, Profile. Detail screens contain tabs for charts, financial data, ownership, and chat. Authentication screens presented when no user logged in.</p>
+
+    <h3>6.2 User Interface</h3>
+    <p>Built with Jetpack Compose using dark theme. Glassmorphism design with semi-transparent elements. Poppins font family. Consistent design patterns across all screens. Responsive layouts adapting to screen sizes.</p>
+
+    <h2>7. Security</h2>
+
+    <h3>7.1 Authentication</h3>
+    <p>Firebase Authentication provides industry-standard security. Password minimum 6 characters. Email validation before registration. Session tokens managed by Firebase SDK. Passwords never stored locally.</p>
+
+    <h3>7.2 Data Security</h3>
+    <p>Firestore security rules enforce access control. User profiles modifiable only by owner. Chat messages readable by all, writable only by authenticated users. Users can delete only their own messages. Transactions stored exclusively on local device.</p>
+
+    <h2>8. Testing</h2>
+
+    <h3>8.1 Testing Methodology</h3>
+    <p>Comprehensive manual testing performed for all critical application flows including authentication (sign up, sign in, sign out), asset browsing and search, transaction recording and validation, portfolio calculation accuracy, real-time chat functionality, offline mode behavior, navigation between screens, and error handling scenarios. Testing covered normal use cases, edge cases, and error conditions to ensure application stability and reliability.</p>
+
+    <h2>9. Requirements Compliance</h2>
+
+    <table>
+        <tr><th>Requirement</th><th>Status</th><th>Implementation</th></tr>
+        <tr><td>Local Database</td><td>Complete</td><td>Room with 4 entities</td></tr>
+        <tr><td>Remote Database</td><td>Complete</td><td>Firebase Firestore</td></tr>
+        <tr><td>API Consumption</td><td>Complete</td><td>CoinGecko, Finnhub APIs</td></tr>
+        <tr><td>Offline Functionality</td><td>Complete</td><td>Cache-first strategy</td></tr>
+        <tr><td>Unit Tests</td><td>Pending</td><td>To be implemented</td></tr>
+        <tr><td>UI Tests</td><td>Pending</td><td>To be implemented</td></tr>
+        <tr><td>Multi-language</td><td>Pending</td><td>3+ languages to be added</td></tr>
+    </table>
+
+    <h2>10. Technical Challenges</h2>
+
+    <h3>10.1 Real-time Calculations</h3>
+    <p>Challenge: Portfolio value calculation with fluctuating prices. Solution: Kotlin Flow-based reactive architecture with automatic recalculation on price updates.</p>
+
+    <h3>10.2 API Rate Limiting</h3>
+    <p>Challenge: Free tier API rate limits. Solution: Aggressive caching with 60-second timeout, graceful degradation to cached data.</p>
+
+    <h3>10.3 Complex Navigation</h3>
+    <p>Challenge: State management across navigation layers. Solution: Jetpack Navigation Compose with proper back stack and state preservation.</p>
+
+    <h3>10.4 Dual Input Mode</h3>
+    <p>Challenge: Quantity or amount input with conversion. Solution: Bidirectional calculation system updating both fields reactively based on current price.</p>
+
+    <h2>11. Project Statistics</h2>
+    <ul>
+        <li>Total screens: 10 (8 main + 2 authentication)</li>
+        <li>Database entities: 4 local (Room) + 2 remote (Firestore)</li>
+        <li>API integrations: 4 services</li>
+        <li>Lines of code: ~5,000 Kotlin</li>
+        <li>Supported assets: 50+ cryptocurrencies, major US stocks</li>
+    </ul>
+
+    <h2>12. Future Enhancements</h2>
+    <ul>
+        <li>Internationalization (French, English, additional languages)</li>
+        <li>Comprehensive test coverage</li>
+        <li>Push notifications for price alerts and messages</li>
+        <li>Advanced charting with technical indicators</li>
+        <li>Transaction export (CSV/PDF)</li>
+        <li>User avatar upload</li>
+        <li>Message reactions</li>
+        <li>News integration</li>
+    </ul>
+
+    <h2>13. Conclusion</h2>
+    <p>Moneytwork demonstrates implementation of a complex mobile application incorporating modern Android development: Jetpack Compose UI, Clean Architecture with MVVM, multi-source data management (local, remote, APIs), real-time Firebase communication, secure authentication, and offline-first architecture. The application meets core requirements for local database, remote database, API consumption, and offline functionality. Modular architecture ensures maintainability and scalability. Future work focuses on test implementation and internationalization.</p>
+
+    <div class="center" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #000;">
+        <p><strong>Moneytwork Project Report</strong></p>
+        <p>Ahmad Habib and Alexandre Bourges</p>
+        <p>January 18, 2026</p>
+    </div>
+</body>
+</html>

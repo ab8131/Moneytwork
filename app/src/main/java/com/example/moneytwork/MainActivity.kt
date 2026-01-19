@@ -32,65 +32,71 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
+                val currentRoute = currentDestination?.route
 
                 val bottomNavItems = listOf(
                     BottomNavItem.Portfolio,
                     BottomNavItem.Crypto,
                     BottomNavItem.Stocks,
-                    BottomNavItem.Community
+                    BottomNavItem.Settings
                 )
+
+                // Hide bottom bar on auth screens
+                val showBottomBar = currentRoute !in listOf("sign_in", "sign_up")
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     containerColor = MaterialTheme.colorScheme.background,
                     bottomBar = {
-                        Surface(
-                            color = Color.Transparent,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    brush = Brush.verticalGradient(
-                                        colors = listOf(
-                                            Color.Transparent,
-                                            Color(0x15FFFFFF),
-                                            Color(0x25FFFFFF)
+                        if (showBottomBar) {
+                            Surface(
+                                color = Color.Transparent,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        brush = Brush.verticalGradient(
+                                            colors = listOf(
+                                                Color.Transparent,
+                                                Color(0x15FFFFFF),
+                                                Color(0x25FFFFFF)
+                                            )
                                         )
                                     )
-                                )
-                        ) {
-                        NavigationBar(
-                            containerColor = Color.Transparent
-                        ) {
-                            bottomNavItems.forEach { item ->
-                                NavigationBarItem(
-                                    icon = { Icon(item.icon, contentDescription = item.title) },
-                                    label = { Text(item.title) },
-                                    selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
-                                    onClick = {
-                                        navController.navigate(item.route) {
-                                            popUpTo(navController.graph.findStartDestination().id) {
-                                                saveState = true
-                                            }
-                                            launchSingleTop = true
-                                            restoreState = true
-                                        }
-                                    },
-                                    colors = NavigationBarItemDefaults.colors(
-                                        selectedIconColor = MaterialTheme.colorScheme.primary,
-                                        selectedTextColor = MaterialTheme.colorScheme.primary,
-                                        unselectedIconColor = Color.White.copy(alpha = 0.6f),
-                                        unselectedTextColor = Color.White.copy(alpha = 0.6f),
-                                        indicatorColor = Color.White.copy(alpha = 0.1f)
-                                    )
-                                )
+                            ) {
+                                NavigationBar(
+                                    containerColor = Color.Transparent
+                                ) {
+                                    bottomNavItems.forEach { item ->
+                                        NavigationBarItem(
+                                            icon = { Icon(item.icon, contentDescription = item.title) },
+                                            label = { Text(item.title) },
+                                            selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                                            onClick = {
+                                                navController.navigate(item.route) {
+                                                    popUpTo(navController.graph.findStartDestination().id) {
+                                                        saveState = true
+                                                    }
+                                                    launchSingleTop = true
+                                                    restoreState = true
+                                                }
+                                            },
+                                            colors = NavigationBarItemDefaults.colors(
+                                                selectedIconColor = MaterialTheme.colorScheme.primary,
+                                                selectedTextColor = MaterialTheme.colorScheme.primary,
+                                                unselectedIconColor = Color.White.copy(alpha = 0.6f),
+                                                unselectedTextColor = Color.White.copy(alpha = 0.6f),
+                                                indicatorColor = Color.White.copy(alpha = 0.1f)
+                                            )
+                                        )
+                                    }
+                                }
                             }
-                        }
                         }
                     }
                 ) { paddingValues ->
                     NavGraph(
                         navController = navController,
-                        modifier = Modifier.padding(paddingValues)
+                        modifier = if (showBottomBar) Modifier.padding(paddingValues) else Modifier
                     )
                 }
             }

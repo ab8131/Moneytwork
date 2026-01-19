@@ -81,12 +81,13 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            GlassCard {
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    // Username
-                    OutlinedTextField(
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                // Username
+                OutlinedTextField(
                         value = username,
                         onValueChange = { username = it },
                         label = { Text("Username") },
@@ -242,7 +243,6 @@ fun SignUpScreen(
                 }
             }
         }
-    }
 }
 
 private fun canSignUp(username: String, email: String, password: String, confirmPassword: String): Boolean {
