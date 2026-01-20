@@ -69,7 +69,9 @@ fun PortfolioScreen(
 
             // Portfolio Info Card
             item {
-                GlassCard {
+                GlassCard(
+                    onClick = { navController.navigate("portfolio_holdings") }
+                ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {

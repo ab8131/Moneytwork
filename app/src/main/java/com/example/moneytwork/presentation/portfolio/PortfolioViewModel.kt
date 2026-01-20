@@ -19,6 +19,9 @@ class PortfolioViewModel @Inject constructor(
     private val _state = mutableStateOf(PortfolioState())
     val state: State<PortfolioState> = _state
 
+    // Expose holdings for the holdings screen
+    val holdings = portfolioRepository.getAllHoldings()
+
     init {
         loadPortfolioData()
     }

@@ -26,7 +26,7 @@ fun DetailScreen(
     val state = viewModel.state.value
     val scrollState = rememberScrollState()
     var selectedTabIndex by remember { mutableStateOf(0) }
-    val tabs = listOf("Graph", "Financials", "Ownership", "Chat")
+    val tabs = listOf("Graph", "Financials", "Chat")
     var showTransactionDialog by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -138,32 +138,6 @@ fun DetailScreen(
                                 }
                             }
                             2 -> {
-                                // Ownership Tab
-                                com.example.moneytwork.presentation.components.GlassCard(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(16.dp)
-                                ) {
-                                    Text(
-                                        text = "Your ${state.coinDetail.name} Holdings",
-                                        style = MaterialTheme.typography.titleLarge,
-                                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
-                                    )
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    Text(
-                                        text = "No holdings yet",
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.6f)
-                                    )
-                                    Spacer(modifier = Modifier.height(8.dp))
-                                    Text(
-                                        text = "Record your first transaction to track your investment",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.4f)
-                                    )
-                                }
-                            }
-                            3 -> {
                                 // Chat Tab
                                 Column(
                                     modifier = Modifier
@@ -212,7 +186,7 @@ fun DetailScreen(
 
                         // Join Chat Button
                         Button(
-                            onClick = { selectedTabIndex = 3 }, // Switch to Chat tab
+                            onClick = { selectedTabIndex = 2 }, // Switch to Chat tab
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp)

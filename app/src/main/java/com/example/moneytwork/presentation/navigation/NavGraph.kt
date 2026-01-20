@@ -18,6 +18,7 @@ import com.example.moneytwork.presentation.auth.SignUpScreen
 import com.example.moneytwork.presentation.market.detail.DetailScreen
 import com.example.moneytwork.presentation.market.list.MarketListScreen
 import com.example.moneytwork.presentation.portfolio.PortfolioScreen
+import com.example.moneytwork.presentation.portfolio.holdings.PortfolioHoldingsScreen
 import com.example.moneytwork.presentation.profile.ProfileScreen
 import com.example.moneytwork.presentation.search.SearchScreen
 import com.example.moneytwork.presentation.language.LanguageScreen
@@ -84,6 +85,11 @@ fun NavGraph(
 
         composable("language") {
             LanguageScreen(navController = navController)
+        }
+
+        // Portfolio Holdings Screen
+        composable("portfolio_holdings") {
+            PortfolioHoldingsScreen(navController = navController)
         }
 
         // Detail Screens
