@@ -1,95 +1,101 @@
 package com.example.moneytwork.domain.model
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Test
 
-class AssetCalculationTest {
+/**
+ * Unit tests for domain models
+ * Tests our Transaction and AssetType enums work correctly
+ */
+class DomainModelTest {
 
     @Test
-    fun `price change percentage should format correctly`() {
-        // Given
-        val positiveChange = 5.67
-        val negativeChange = -3.42
-
-        // When
-        val formattedPositive = String.format("%.2f%%", positiveChange)
-        val formattedNegative = String.format("%.2f%%", negativeChange)
-
-        // Then
-        assertEquals("5.67%", formattedPositive)
-        assertEquals("-3.42%", formattedNegative)
+    fun `TransactionType enum has BUY and SELL`() {
+        // Test that our TransactionType enum is defined correctly
+        assertEquals(TransactionType.BUY, TransactionType.valueOf("BUY"))
+        assertEquals(TransactionType.SELL, TransactionType.valueOf("SELL"))
     }
 
     @Test
-    fun `portfolio value calculation should be accurate`() {
-        // Given
-        val quantity = 0.5
-        val pricePerUnit = 50000.0
-        val invested = 20000.0
-
-        // When
-        val currentValue = quantity * pricePerUnit
-        val profit = currentValue - invested
-        val profitPercentage = (profit / invested) * 100
-
-        // Then
-        assertEquals(25000.0, currentValue, 0.01)
-        assertEquals(5000.0, profit, 0.01)
-        assertEquals(25.0, profitPercentage, 0.01)
+    fun `AssetType enum has CRYPTO and STOCK`() {
+        // Test that our AssetType enum is defined correctly
+        assertEquals(AssetType.CRYPTO, AssetType.valueOf("CRYPTO"))
+        assertEquals(AssetType.STOCK, AssetType.valueOf("STOCK"))
     }
 
     @Test
-    fun `price formatting should handle large numbers`() {
-        // Given
-        val price = 1234567.89
+    fun `Transaction model creates with correct types`() {
+        // Test creating a Transaction with enums
+        val transaction = Transaction(
+            id = 1,
+            assetId = "bitcoin",
+            assetType = AssetType.CRYPTO,
+            assetName = "Bitcoin",
+            assetSymbol = "BTC",
+            transactionType = TransactionType.BUY,
+            amount = 0.5,
+            pricePerUnit = 50000.0,
+            totalValue = 25000.0,
+            timestamp = System.currentTimeMillis(),
+            notes = "Test transaction"
+        )
 
-        // When
-        val formatted = String.format("$%,.2f", price)
-
-        // Then
-        assertTrue(formatted.contains("1,234,567.89") || formatted.contains("1234567.89"))
+        assertEquals(AssetType.CRYPTO, transaction.assetType)
+        assertEquals(TransactionType.BUY, transaction.transactionType)
+        assertEquals("bitcoin", transaction.assetId)
+        assertEquals(0.5, transaction.amount, 0.001)
     }
 
     @Test
-    fun `percentage change should indicate trend direction`() {
-        // Given
-        val positiveChange = 5.0
-        val negativeChange = -3.0
-        val noChange = 0.0
+    fun `Transaction supports both BUY and SELL operations`() {
+        // Test BUY transaction
+        val buyTransaction = Transaction(
+            id = 1,
+            assetId = "bitcoin",
+            assetType = AssetType.CRYPTO,
+            assetName = "Bitcoin",
+            assetSymbol = "BTC",
+            transactionType = TransactionType.BUY,
+            amount = 0.1,
+            pricePerUnit = 50000.0,
+            totalValue = 5000.0,
+            timestamp = System.currentTimeMillis()
+        )
 
-        // Then
-        assertTrue(positiveChange > 0)  // Uptrend
-        assertTrue(negativeChange < 0)  // Downtrend
-        assertEquals(0.0, noChange, 0.0)  // No change
+        assertEquals(TransactionType.BUY, buyTransaction.transactionType)
+
+        // Test SELL transaction
+        val sellTransaction = buyTransaction.copy(
+            id = 2,
+            transactionType = TransactionType.SELL
+        )
+
+        assertEquals(TransactionType.SELL, sellTransaction.transactionType)
     }
 
     @Test
-    fun `calculate market cap from price and supply`() {
-        // Given
-        val price = 50000.0
-        val circulatingSupply = 19000000.0
+    fun `AssetHolding model stores portfolio data correctly`() {
+        // Test that AssetHolding can store complete portfolio information
+        val holding = AssetHolding(
+            assetId = "bitcoin",
+            assetType = AssetType.CRYPTO,
+            assetName = "Bitcoin",
+            assetSymbol = "BTC",
+            totalAmount = 0.5,
+            averageBuyPrice = 45000.0,
+            totalInvested = 22500.0,
+            currentPrice = 50000.0,
+            currentValue = 25000.0,
+            profitLoss = 2500.0,
+            profitLossPercentage = 11.11,
+            transactions = emptyList()
+        )
 
-        // When
-        val marketCap = price * circulatingSupply
-
-        // Then
-        assertEquals(950000000000.0, marketCap, 0.01)  // 950 billion
-    }
-
-    @Test
-    fun `calculate 24h high and low range`() {
-        // Given
-        val high24h = 52000.0
-        val low24h = 48000.0
-
-        // When
-        val range = high24h - low24h
-        val midpoint = (high24h + low24h) / 2
-
-        // Then
-        assertEquals(4000.0, range, 0.01)
-        assertEquals(50000.0, midpoint, 0.01)
+        assertEquals("bitcoin", holding.assetId)
+        assertEquals(AssetType.CRYPTO, holding.assetType)
+        assertEquals(0.5, holding.totalAmount, 0.001)
+        assertEquals(45000.0, holding.averageBuyPrice, 0.01)
+        assertTrue("Profit should be positive", holding.profitLoss > 0)
     }
 }
 
