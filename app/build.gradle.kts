@@ -96,6 +96,9 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.runtime.compose)
 
+    // DataStore
+    implementation(libs.datastore.preferences)
+
     // Google Fonts
     implementation(libs.androidx.compose.ui.text.google.fonts)
 

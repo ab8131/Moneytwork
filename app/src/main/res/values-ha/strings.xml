@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Moneytwork</string>
+
+    <!-- Common -->
+    <string name="back">Koma baje</string>
+    <string name="settings">Saitunan</string>
+    <string name="profile">Bayani</string>
+    <string name="language">Harshe</string>
+    <string name="logout">Fita</string>
+    <string name="sign_out_of_your_account">Fita daga asusunka</string>
+    <string name="view_and_edit_your_profile">Duban da gyara bayanka</string>
+    <string name="change_app_language">Canja harshensa app</string>
+    <string name="member_since">Memba tun</string>
+
+    <!-- Authentication -->
+    <string name="welcome">Sannu jiya</string>
+    <string name="sign_in">Shiga</string>
+    <string name="sign_up">Zama memba</string>
+    <string name="email">Imel</string>
+    <string name="password">Kalmar sirri</string>
+    <string name="username">Sunan mai aiki</string>
+    <string name="confirm_password">Tabbatar da kalmar sirri</string>
+    <string name="forgot_password">Manta kalmar sirri?</string>
+    <string name="dont_have_account">Bakin ka da asusu?</string>
+    <string name="already_have_account">Kana da asusu jiya?</string>
+    <string name="invalid_email">Imelin ba daidai ba ne</string>
+    <string name="password_too_short">Kalmar sirri dole ta kasua abokan almara 6</string>
+    <string name="passwords_not_match">Kalmomin sirri ba su dace ba</string>
+
+    <!-- Stocks & Crypto -->
+    <string name="stocks">Jerin kasuwa</string>
+    <string name="crypto">Crypto</string>
+    <string name="portfolio">Jerin aiki</string>
+    <string name="watchlist">Jerin lura</string>
+    <string name="price">Farashin</string>
+    <string name="change">Canja</string>
+    <string name="chat">Tattaunawa</string>
+
+    <!-- Portfolio Page -->
+    <string name="total_portfolio_value">Jimlar darajar jerin aiki</string>
+    <string name="total_invested">Jimlar saka hannun jari</string>
+    <string name="returns">Riba</string>
+    <string name="top_cryptocurrencies">Manyan Crypto</string>
+    <string name="top_stocks">Manyan Hannun Jari</string>
+    <string name="view_all">Duba duka →</string>
+
+    <!-- Errors & Messages -->
+    <string name="error">Kuskure</string>
+    <string name="success">Nasara</string>
+    <string name="loading">Ana loda...</string>
+    <string name="try_again">Sai a yawo</string>
+    <string name="something_went_wrong">Wani abu ya keta</string>
+</resources>

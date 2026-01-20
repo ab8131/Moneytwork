@@ -10,11 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.moneytwork.R
 import com.example.moneytwork.presentation.components.GlassCard
 import com.example.moneytwork.presentation.market.list.MarketListViewModel
 import com.example.moneytwork.ui.theme.NegativeRed
@@ -56,7 +58,7 @@ fun PortfolioScreen(
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "Portfolio",
+                        text = stringResource(R.string.portfolio),
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
@@ -78,7 +80,7 @@ fun PortfolioScreen(
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            text = "Total Portfolio Value",
+                            text = stringResource(R.string.total_portfolio_value),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.SemiBold
@@ -118,7 +120,7 @@ fun PortfolioScreen(
                     ) {
                         Column {
                             Text(
-                                text = "Total Invested",
+                                text = stringResource(R.string.total_invested),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = Color.White.copy(alpha = 0.6f)
                             )
@@ -131,7 +133,7 @@ fun PortfolioScreen(
                         }
                         Column(horizontalAlignment = Alignment.End) {
                             Text(
-                                text = "Returns",
+                                text = stringResource(R.string.returns),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = Color.White.copy(alpha = 0.6f)
                             )
@@ -164,14 +166,14 @@ fun PortfolioScreen(
                             )
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(
-                                text = "Top Cryptocurrencies",
+                                text = stringResource(R.string.top_cryptocurrencies),
                                 style = MaterialTheme.typography.titleLarge,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold
                             )
                         }
                         Text(
-                            text = "View All →",
+                            text = stringResource(R.string.view_all),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.primary
                         )
@@ -235,7 +237,7 @@ fun PortfolioScreen(
                         }
                     } else {
                         Text(
-                            text = "Loading...",
+                            text = stringResource(R.string.loading),
                             color = Color.White.copy(alpha = 0.6f)
                         )
                     }
@@ -260,14 +262,14 @@ fun PortfolioScreen(
                             )
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(
-                                text = "Top Stocks",
+                                text = stringResource(R.string.top_stocks),
                                 style = MaterialTheme.typography.titleLarge,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold
                             )
                         }
                         Text(
-                            text = "View All →",
+                            text = stringResource(R.string.view_all),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.primary
                         )

@@ -20,7 +20,7 @@ import com.example.moneytwork.presentation.market.list.MarketListScreen
 import com.example.moneytwork.presentation.portfolio.PortfolioScreen
 import com.example.moneytwork.presentation.profile.ProfileScreen
 import com.example.moneytwork.presentation.search.SearchScreen
-import com.example.moneytwork.presentation.settings.LanguageScreen
+import com.example.moneytwork.presentation.language.LanguageScreen
 import com.example.moneytwork.presentation.settings.SettingsScreen
 import com.example.moneytwork.presentation.stocks.StockListScreen
 import com.example.moneytwork.presentation.stocks.detail.StockDetailScreen

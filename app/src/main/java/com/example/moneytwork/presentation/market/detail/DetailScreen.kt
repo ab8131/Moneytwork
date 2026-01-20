@@ -210,9 +210,9 @@ fun DetailScreen(
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        // Join Chat Button (for partner's integration)
+                        // Join Chat Button
                         Button(
-                            onClick = { /* TODO: Navigate to chat */ },
+                            onClick = { selectedTabIndex = 3 }, // Switch to Chat tab
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp)

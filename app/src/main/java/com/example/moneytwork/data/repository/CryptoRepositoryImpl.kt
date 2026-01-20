@@ -26,23 +26,79 @@ class CryptoRepositoryImpl @Inject constructor(
     private val watchlistDao: WatchlistDao
 ) : CryptoRepository {
 
+    companion object {
+        private const val CACHE_DURATION_MS = 10 * 60 * 1000L // 10 minutes cache
+        private var lastFetchTime = 0L
+    }
+
     override fun getCoins(forceRefresh: Boolean): Flow<Resource<List<Coin>>> = flow {
         Log.d("CryptoRepository", "=== getCoins START ===")
         emit(Resource.Loading())
 
-        // Try to fetch from API first
+        // Check cache first if not forcing refresh
+        val currentTime = System.currentTimeMillis()
+        val cacheValid = (currentTime - lastFetchTime) < CACHE_DURATION_MS
+
+        if (!forceRefresh && cacheValid) {
+            Log.d("CryptoRepository", "Loading from cache (valid for ${CACHE_DURATION_MS / 1000 / 60} min)")
+            try {
+                val cachedCoins = coinDao.getCoins()
+                var cacheLoaded = false
+                cachedCoins.collect { coins ->
+                    if (coins.isNotEmpty()) {
+                        Log.d("CryptoRepository", "✓ Loaded ${coins.size} coins from cache")
+                        emit(Resource.Success(coins.map { it.toCoin() }))
+                        cacheLoaded = true
+                    }
+                }
+                if (cacheLoaded) {
+                    Log.d("CryptoRepository", "=== getCoins END (from cache) ===")
+                    return@flow
+                }
+            } catch (_: Exception) {
+                Log.e("CryptoRepository", "Cache read failed, falling through to API")
+            }
+        }
+
+        // Try to fetch from API
         try {
             Log.d("CryptoRepository", "Attempting to fetch from API...")
+
+            // Add delay to avoid rate limiting (CoinGecko free tier)
+            kotlinx.coroutines.delay(1000) // 1 second delay
+
             val remoteCoins = api.getMarketCoins()
             Log.d("CryptoRepository", "✓ API SUCCESS: received ${remoteCoins.size} coins")
 
             val entities = remoteCoins.map { it.toEntity() }
             coinDao.clearCoins()
             coinDao.insertCoins(entities)
+            lastFetchTime = currentTime
             Log.d("CryptoRepository", "✓ Cached ${entities.size} coins to database")
 
             emit(Resource.Success(entities.map { it.toCoin() }))
             Log.d("CryptoRepository", "✓ Emitted success with ${entities.size} coins")
+        } catch (e: retrofit2.HttpException) {
+            if (e.code() == 429) {
+                Log.e("CryptoRepository", "✗ Rate limit exceeded (429)")
+                // Load from cache on rate limit
+                try {
+                    val cachedCoins = coinDao.getCoins()
+                    cachedCoins.collect { coins ->
+                        if (coins.isNotEmpty()) {
+                            Log.d("CryptoRepository", "✓ Loaded ${coins.size} coins from cache (rate limited)")
+                            emit(Resource.Success(coins.map { it.toCoin() }))
+                        } else {
+                            emit(Resource.Error("Rate limit exceeded. Please try again in a minute."))
+                        }
+                    }
+                } catch (_: Exception) {
+                    emit(Resource.Error("Rate limit exceeded. Please try again in a minute."))
+                }
+            } else {
+                Log.e("CryptoRepository", "✗ HTTP Error ${e.code()}: ${e.message()}")
+                emit(Resource.Error("HTTP Error: ${e.message()}"))
+            }
         } catch (e: java.net.UnknownHostException) {
             Log.e("CryptoRepository", "✗ DNS Error: ${e.message}")
             Log.e("CryptoRepository", "Attempting to load from cache...")
