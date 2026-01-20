@@ -1,272 +1,108 @@
 # Moneytwork
 
-A modern Android app for tracking cryptocurrency and stock portfolios with integrated social features.
+**Financial tracking meets social networking** - A modern Android app that combines cryptocurrency and stock portfolio management with real-time community discussions.
 
-## Overview
+## Why Moneytwork?
 
-Moneytwork combines financial portfolio tracking with social networking, allowing users to:
-- Track crypto and stock investments with real-time prices
-- Record BUY/SELL transactions and view profit/loss
-- Chat with other users about specific assets
-- Switch between multiple languages
-- Use the app offline with local caching
+Traditional portfolio trackers are isolated experiences. Moneytwork brings investors together by combining robust portfolio tracking with asset-specific chat rooms, enabling you to track your investments while engaging with a community of like-minded investors.
 
----
+## Key Features
 
-## Features
+**Smart Portfolio Tracking**
+- Track multiple cryptocurrencies and stocks in one unified portfolio
+- Record buy/sell transactions with automatic profit/loss calculations
+- View average cost basis across multiple purchases
+- Real-time portfolio valuation based on live market data
 
-### Portfolio Management
-- Track cryptocurrency and stock holdings
-- Record transactions (BUY/SELL)
-- Real-time profit/loss calculations
-- Average buy price tracking
-- Portfolio overview with total value
+**Live Market Data**
+- Real-time cryptocurrency prices powered by CoinGecko
+- Live stock quotes via Finnhub
+- Interactive price charts with multiple timeframes (1D, 1W, 1M, 1Y, ALL)
+- Advanced search across thousands of assets
 
-### Live Market Data
-- Real-time cryptocurrency prices (CoinGecko API)
-- Live stock quotes (Finnhub API)
-- Price charts with multiple timeframes (1D, 1W, 1M, 1Y, ALL)
-- Search functionality
+**Community Discussions**
+- Asset-specific chat rooms for every cryptocurrency and stock
+- Real-time messaging with other investors
+- Share insights and discuss market trends
 
-### Social Features
-- Group chat per asset (e.g., Bitcoin chat, AAPL chat)
-- Real-time messaging with Firebase
-- User authentication
+**Built for Everyone**
+- Multi-language support (English, French, Hausa)
+- Full offline functionality with smart caching
+- Clean, modern interface with dark mode
+- Secure authentication
 
-### Multi-Language Support
-- English, French, Hausa
-- Language switcher in settings
-- Persistent language preference
+## Technology
 
-### Offline Support
-- Local caching with Room database
-- Works without internet connection
-- 10-minute cache duration
+Built with modern Android development tools:
 
----
+- **Kotlin** - Modern, expressive language
+- **Jetpack Compose** - Declarative UI framework
+- **Material Design 3** - Clean, intuitive interface
+- **MVVM Architecture** - Maintainable, testable code
+- **Room Database** - Offline-first data persistence
+- **Firebase** - Authentication and real-time chat
+- **Retrofit** - Efficient API communication
 
-## Tech Stack
+## Getting Started
 
-**Language**: Kotlin  
-**UI**: Jetpack Compose + Material 3  
-**Architecture**: MVVM + Repository Pattern  
-**Dependency Injection**: Hilt  
-**Local Database**: Room  
-**Remote Database**: Firebase Firestore  
-**APIs**: Retrofit + OkHttp  
-**Authentication**: Firebase Auth  
-**Charts**: Custom Compose Canvas  
+### Requirements
+- Android 8.0 (API 26) or higher
+- Internet connection for live data (works offline with cached data)
 
----
+### Installation
 
-## Project Structure
-
-```
-app/
-├── data/
-│   ├── local/          # Room database (DAOs, entities)
-│   ├── remote/         # API services
-│   ├── preferences/    # DataStore for settings
-│   └── repository/     # Data repositories
-├── domain/
-│   ├── model/          # Domain models
-│   └── repository/     # Repository interfaces
-├── presentation/
-│   ├── auth/           # Sign In/Sign Up screens
-│   ├── chat/           # Chat functionality
-│   ├── crypto/         # Cryptocurrency list
-│   ├── detail/         # Asset detail screens
-│   ├── language/       # Language selection
-│   ├── navigation/     # Navigation setup
-│   ├── portfolio/      # Portfolio & holdings
-│   ├── profile/        # User profile
-│   ├── settings/       # App settings
-│   └── stocks/         # Stock list
-└── ui/
-    └── theme/          # Material 3 theme, colors, fonts
+```bash
+git clone https://github.com/ab8131/Moneytwork.git
+cd moneytwork
+./gradlew assembleRelease
 ```
 
----
-
-## Setup
-
-### Prerequisites
-- Android Studio (latest version)
-- JDK 17+
-- Android SDK 34+
-
-### Firebase Setup
-1. Create a Firebase project at [console.firebase.google.com](https://console.firebase.google.com)
-2. Enable Firebase Authentication (Email/Password)
+### Firebase Setup (for developers)
+1. Create a Firebase project
+2. Enable Authentication (Email/Password)
 3. Create a Firestore database
-4. Download `google-services.json` and place it in `app/` folder
+4. Add your `google-services.json` to the `app/` directory
 
-### API Keys
-The app uses free tiers of:
-- **CoinGecko API** - No key required for basic usage
-- **Finnhub API** - Free tier available at [finnhub.io](https://finnhub.io)
+## How It Works
 
-### Build & Run
-```bash
-# Clone the repository
-git clone [your-repo-url]
+**Track Your Investments**
+1. Sign up and authenticate securely
+2. Search for cryptocurrencies or stocks
+3. Record your buy/sell transactions
+4. View real-time profit/loss calculations
 
-# Open in Android Studio
-# Build and run on emulator or device
+**Connect with the Community**
+1. Navigate to any asset (Bitcoin, Tesla, etc.)
+2. Join the asset-specific chat room
+3. Discuss market trends and strategies
+4. Learn from other investors
 
-# Or via command line:
-./gradlew assembleDebug
-./gradlew installDebug
-```
+**Works Everywhere**
+- Use the app in English, French, or Hausa
+- Full functionality offline with smart caching
+- Seamless synchronization when back online
 
----
+## Data Sources
 
-## Testing
+- **Cryptocurrency Data**: Powered by [CoinGecko API](https://www.coingecko.com/)
+- **Stock Market Data**: Powered by [Finnhub API](https://finnhub.io/)
+- **Real-time Chat**: Firebase Firestore
 
-### Run Unit Tests
-```bash
-./gradlew testDebugUnitTest
-```
+## Privacy & Security
 
-### Run UI Tests (requires emulator/device)
-```bash
-./gradlew connectedDebugAndroidTest
-```
-
-**Test Coverage**:
-- 12 unit tests (data models, state management)
-- 5 UI tests (authentication, navigation)
-
----
-
-## Key Dependencies
-
-```gradle
-// UI & Compose
-implementation "androidx.compose.material3:material3"
-implementation "androidx.navigation:navigation-compose"
-
-// Dependency Injection
-implementation "com.google.dagger:hilt-android"
-kapt "com.google.dagger:hilt-compiler"
-
-// Database
-implementation "androidx.room:room-runtime"
-implementation "androidx.room:room-ktx"
-
-// Firebase
-implementation "com.google.firebase:firebase-auth"
-implementation "com.google.firebase:firebase-firestore"
-
-// Networking
-implementation "com.squareup.retrofit2:retrofit"
-implementation "com.squareup.retrofit2:converter-gson"
-
-// Charts
-implementation "com.github.PhilJay:MPAndroidChart"
-```
-
----
-
-## Features by Screen
-
-### Portfolio (Home)
-- Total portfolio value
-- Profit/loss summary
-- Top cryptocurrencies preview
-- Top stocks preview
-- Click to view detailed holdings
-
-### Crypto / Stocks
-- Live price list
-- 24h price change
-- Search functionality
-- Click to view details
-
-### Asset Details
-- Price chart with timeframes
-- Financial data (market cap, volume, etc.)
-- Record transaction dialog
-- Group chat per asset
-
-### Portfolio Holdings
-- All your investments in one place
-- Per-asset profit/loss
-- Average buy price
-- Current value vs invested
-
-### Settings
-- User profile
-- Language selection
-- Logout
-
----
-
-## Multi-Language Implementation
-
-Supports 3 languages:
-- English (en)
-- French (fr)
-- Hausa (ha)
-
-All UI text uses string resources. Language changes recreate the activity to apply new locale.
-
----
-
-## Offline Support
-
-The app works offline through:
-- Room database caching for crypto/stock prices
-- 10-minute cache validity
-- Local storage for all transactions
-- Graceful handling of network errors
-
----
-
-## Database Schema
-
-### Local (Room)
-- **transactions** - BUY/SELL records
-- **coins** - Cached cryptocurrency data
-- **stocks** - Cached stock data
-
-### Remote (Firestore)
-- **users** - User profiles
-- **chats/{assetId}/messages** - Chat messages per asset
-
----
-
-## Team
-
-This is a 2-person team project:
-- **Developer 1**: Portfolio tracking, API integration, charts
-- **Developer 2**: Authentication, social features, chat
-
----
-
-## Academic Requirements Met
-
-✅ Local database (Room)  
-✅ Remote database (Firebase Firestore)  
-✅ External API consumption (CoinGecko + Finnhub)  
-✅ Own backend (Firebase)  
-✅ Offline functionality  
-✅ Multi-language support (3 languages)  
-✅ Unit tests  
-✅ UI tests  
-
----
+- Secure authentication with Firebase
+- Local data encrypted and stored on-device
+- No transaction data shared with third parties
+- Open source - review the code yourself
 
 ## License
 
-This is an academic project for educational purposes.
-
----
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
-- CoinGecko API for cryptocurrency data
-- Finnhub API for stock market data
-- Firebase for authentication and real-time database
-- Material Design 3 for UI components
+- CoinGecko for cryptocurrency market data
+- Finnhub for stock market data
+- Firebase for backend infrastructure
+- The Android and Kotlin communities
 
