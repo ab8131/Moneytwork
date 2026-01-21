@@ -9,12 +9,22 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = PrimaryBlue,
+    onPrimary = Color.White,
+    primaryContainer = PrimaryBlueVariant,
+    onPrimaryContainer = Color.White,
+    secondary = PrimaryBlue.copy(alpha = 0.7f),
+    onSecondary = Color.White,
+    background = DeepBlueBackground,
+    onBackground = Color.White,
+    surface = DeepBlueSurface,
+    onSurface = Color.White,
+    error = NegativeRed,
+    onError = Color.White
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -35,9 +45,8 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun MoneytworkTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    darkTheme: Boolean = true, // Force dark mode
+    dynamicColor: Boolean = false, // Disable dynamic color for consistent look
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
